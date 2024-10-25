@@ -1,0 +1,19 @@
+﻿@model List<Publicacion>
+@using Dominio
+
+@foreach (Publicacion p in Model)
+{
+    <tr>
+        <td>@p.Nombre</td>
+        <td>$@p.PrecioFinal()</td>
+        <td>@p.Estado</td>
+        <td><a href="/Publicaciones">Botón (S/I)</a></td>
+    </tr>
+}
+
+@if (Model.Count == 0)
+{
+    <tr>
+        <td class="text-center" colspan="3">No se encontraron resultados</td>
+    </tr>
+}

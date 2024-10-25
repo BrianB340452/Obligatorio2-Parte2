@@ -1,0 +1,46 @@
+﻿@model List<Publicacion>
+@using Dominio
+
+@{
+    ViewData["Title"] = "Publicaciones";
+    var filtroActual = ViewContext.HttpContext.Request.Query["filtro"].ToString();
+}
+
+<!-- Formulario de búsqueda -->
+<input class="form-control" type="text" id="filtro" placeholder="Escribe para buscar publicaciones..." value="@filtroActual" />
+
+<!-- Tabla de resultados -->
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody class="" id="tabla-publicaciones">
+        <partial name="TablaListado" model="Model" />
+    </tbody>
+</table>
+
+<script>
+    document.getElementById("filtro").addEventListener("input", function() {
+        // Obtengo el el valor que se ingreso en el buscador.
+        const filtro = this.value;
+
+        // Hago la petición de manera asíncrona para que no se reinicie la página.
+        fetch(`/Publicaciones/BuscarPublicaciones?filtro=${filtro}`)
+            // Obtengo la respuesta y la transformo en texto.
+            .then(response => response.text())
+
+            // Obtengo el texto y lo inserto en la tabla.
+            .then(html => {
+                document.getElementById("tabla-publicaciones").innerHTML = html;
+            })
+
+            // En caso de error, lo muestro en consola.
+            .catch(error => console.error("Error al cargar publicaciones:", error));
+    });
+</script>
