@@ -38,14 +38,14 @@ namespace Dominio
             return _ofertas.Last().Cliente;
         }
 
-        public override double PrecioFinal()
+        public override double CalcularPrecio()
         {
             if (_ofertas != null && _ofertas.Count != 0)
             {
                 return _ofertas.Last().Monto;
             }
 
-            return base.PrecioFinal();
+            return base.CalcularPrecio();
         }
     }
 }

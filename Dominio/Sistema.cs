@@ -4,11 +4,14 @@ namespace Dominio
 {
     public class Sistema
     {
-        private static Sistema s_instancia;
-        
+        #region ATRIBUTOS
         private List<Usuario> _listaUsuarios = new List<Usuario>();
         private List<Articulo> _listaArticulos = new List<Articulo>();
         private List<Publicacion> _listaPublicaciones = new List<Publicacion>();
+        #endregion
+
+        #region SISTEMA
+        private static Sistema s_instancia;
 
         private Sistema()
         {
@@ -26,6 +29,7 @@ namespace Dominio
                 return s_instancia;
             }
         }
+        #endregion
 
         #region GETTERS
         public List<Publicacion> Publicaciones { get { return _listaPublicaciones; } }
@@ -191,6 +195,77 @@ namespace Dominio
             }
 
             return articulos;
+        }
+
+        //Listado de publicaciones dados su nombre y/o estado.
+        public List<Publicacion> ListarPublicacionesFiltradas(string nombre, int estado)
+        {
+            // Si el nombre es vacio y el estado = 0, devuelvo todas las publicaciones.
+            if (string.IsNullOrEmpty(nombre) && estado == 0) return Publicaciones;
+
+            // Si el estado = 0, listo las publicaciones filtradas solo por nombre.
+            if (estado == 0) return ListarPublicacionesPorNombre(nombre);
+
+
+            // Guardo el estado de la publicación según el valor de estado.
+            EstadoPublicacion estadoPublicacion = new EstadoPublicacion();
+            
+            switch (estado)
+            {
+                case 1:
+                    estadoPublicacion = EstadoPublicacion.ABIERTA;
+                    break;
+                case 2:
+                    estadoPublicacion = EstadoPublicacion.CERRADA;
+                    break;
+                case 3:
+                    estadoPublicacion = EstadoPublicacion.CANCELADA;
+                    break;
+                default:
+                    break;
+            }
+            
+
+            // Si el nombre es vacío pero el estado es != 0, listo las publicaciones filtradas solo por estado.
+            if (string.IsNullOrEmpty(nombre)) return ListarPublicacionesPorEstado(estadoPublicacion);
+
+
+            // Si el nombre no es vacío y el estado es != 0, listo las publicaciones filtradas por nombre y estado.
+            List<Publicacion> publicaciones = new List<Publicacion>();
+
+            foreach (Publicacion p in ListarPublicacionesPorEstado(estadoPublicacion))
+            {
+                if (p.Nombre.ToLower().Contains(nombre.ToLower()))
+                {
+                    publicaciones.Add(p);
+                }
+            }
+
+            return publicaciones;
+        }
+
+        private List<Publicacion> ListarPublicacionesPorNombre(string nombre)
+        {
+            List<Publicacion> publicaciones = new List<Publicacion>();
+
+            foreach (Publicacion p in _listaPublicaciones)
+            {
+                if (p.Nombre.ToLower().Contains(nombre.ToLower())) publicaciones.Add(p);
+            }
+
+            return publicaciones;
+        }
+
+        private List<Publicacion> ListarPublicacionesPorEstado(EstadoPublicacion estado)
+        {
+            List<Publicacion> publicaciones = new List<Publicacion>();
+
+            foreach (Publicacion p in _listaPublicaciones)
+            {
+                if (p.Estado == estado) publicaciones.Add(p);
+            }
+
+            return publicaciones;
         }
 
         //Listado de publicaciones que se encuentren entre dos fechas específicas.

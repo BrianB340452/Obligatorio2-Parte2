@@ -11,9 +11,9 @@ public class PublicacionesController : Controller
         return View(publicaciones);
     }
 
-    public PartialViewResult BuscarPublicaciones(string filtro)
+    public PartialViewResult BuscarPublicaciones(string filtro, int estado)
     {
-        List<Cliente> publicaciones = sistema.ListarClientesPorNombre(filtro);
+        List<Publicacion> publicaciones = sistema.ListarPublicacionesFiltradas(filtro, estado);
         return PartialView("TablaListado", publicaciones);
     }
 }

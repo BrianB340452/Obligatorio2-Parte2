@@ -55,7 +55,7 @@ namespace Dominio
             if (_fechaPublicacion < new DateTime(2024, 1, 1) || _fechaPublicacion > DateTime.Today) throw new Exception("La fecha de publicación es inválida.");
         }
 
-        public virtual double PrecioFinal()
+        public virtual double CalcularPrecio()
         {
             double precioFinal = 0;
 
