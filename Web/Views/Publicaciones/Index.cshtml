@@ -3,18 +3,22 @@
 
 @{
     ViewData["Title"] = "Publicaciones";
-    string filtroActual = ViewContext.HttpContext.Request.Query["filtro"].ToString();
 }
 
 <!-- Formulario de búsqueda -->
 <div class="row py-3">
     <div class="col-6">
         <label class="form-label" for="txtFiltro">Buscar</label>
-        <input class="form-control" type="text" id="txtFiltro" placeholder="Escribe para buscar publicaciones..." value="@filtroActual" />
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </span>
+            <input class="form-control" type="text" id="txtFiltro" placeholder="Escribe aquí para buscar..." aria-describedby="basic-addon1" />
+        </div>
     </div>
     
     <div class="col-6">
-        <label class="form-label" for="selectEstado">Estado</label>
+        <label class="form-label" for="selectEstado">Filtrar por estado</label>
 
         <select id="selectEstado" class="form-select">
             <option value="0" selected>Cualquiera</option>

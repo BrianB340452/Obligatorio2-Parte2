@@ -429,27 +429,27 @@ namespace Dominio
 
         private void PrecargarPublicaciones()
         {
-            // PROFE YA LO HABLAMOS: Constructor solo para precargas (hay otro para las altas que no incluye las listas)
+            // Constructor solo para precargas (hay otro para las altas que no incluye las listas)
             AltaPublicacion(new Subasta("Subasta 1", EstadoPublicacion.ABIERTA, new DateTime(2024, 09, 15), ObtenerArticulosAleatorios(2), null));
-            AltaPublicacion(new Subasta("Subasta 2", EstadoPublicacion.ABIERTA, new DateTime(2024, 09, 18), ObtenerArticulosAleatorios(6), ObtenerOfertasAleatorias()));
+            AltaPublicacion(new Subasta("Subasta 2", EstadoPublicacion.CERRADA, new DateTime(2024, 09, 18), ObtenerArticulosAleatorios(6), ObtenerOfertasAleatorias()));
             AltaPublicacion(new Subasta("Subasta 3", EstadoPublicacion.ABIERTA, new DateTime(2024, 09, 20), ObtenerArticulosAleatorios(4), null));
             AltaPublicacion(new Subasta("Subasta 4", EstadoPublicacion.ABIERTA, new DateTime(2024, 09, 22), ObtenerArticulosAleatorios(3), ObtenerOfertasAleatorias()));
-            AltaPublicacion(new Subasta("Subasta 5", EstadoPublicacion.ABIERTA, new DateTime(2024, 09, 25), ObtenerArticulosAleatorios(4), null));
-            AltaPublicacion(new Subasta("Subasta 6", EstadoPublicacion.ABIERTA, new DateTime(2024, 09, 27), ObtenerArticulosAleatorios(2), ObtenerOfertasAleatorias()));
+            AltaPublicacion(new Subasta("Subasta 5", EstadoPublicacion.CANCELADA, new DateTime(2024, 09, 25), ObtenerArticulosAleatorios(4), null));
+            AltaPublicacion(new Subasta("Subasta 6", EstadoPublicacion.CERRADA, new DateTime(2024, 09, 27), ObtenerArticulosAleatorios(2), ObtenerOfertasAleatorias()));
             AltaPublicacion(new Subasta("Subasta 7", EstadoPublicacion.ABIERTA, new DateTime(2024, 10, 01), ObtenerArticulosAleatorios(1), null));
             AltaPublicacion(new Subasta("Subasta 8", EstadoPublicacion.ABIERTA, new DateTime(2024, 10, 03), ObtenerArticulosAleatorios(4), null));
-            AltaPublicacion(new Subasta("Subasta 9", EstadoPublicacion.ABIERTA, new DateTime(2024, 10, 05), ObtenerArticulosAleatorios(4), null));
+            AltaPublicacion(new Subasta("Subasta 9", EstadoPublicacion.CERRADA, new DateTime(2024, 10, 05), ObtenerArticulosAleatorios(4), null));
             AltaPublicacion(new Subasta("Subasta 10", EstadoPublicacion.ABIERTA, new DateTime(2024, 10, 06), ObtenerArticulosAleatorios(6), ObtenerOfertasAleatorias()));
 
             AltaPublicacion(new Venta("Venta 1", EstadoPublicacion.ABIERTA, new DateTime(2024, 10, 01), ObtenerArticulosAleatorios(3), true));
-            AltaPublicacion(new Venta("Venta 2", EstadoPublicacion.ABIERTA, new DateTime(2024, 02, 05), ObtenerArticulosAleatorios(4), false));
+            AltaPublicacion(new Venta("Venta 2", EstadoPublicacion.CERRADA, new DateTime(2024, 02, 05), ObtenerArticulosAleatorios(4), false));
             AltaPublicacion(new Venta("Venta 3", EstadoPublicacion.ABIERTA, new DateTime(2024, 02, 08), ObtenerArticulosAleatorios(1), false));
-            AltaPublicacion(new Venta("Venta 4", EstadoPublicacion.ABIERTA, new DateTime(2024, 05, 12), ObtenerArticulosAleatorios(5), false));
-            AltaPublicacion(new Venta("Venta 5", EstadoPublicacion.ABIERTA, new DateTime(2024, 09, 15), ObtenerArticulosAleatorios(7), true));
+            AltaPublicacion(new Venta("Venta 4", EstadoPublicacion.CERRADA, new DateTime(2024, 05, 12), ObtenerArticulosAleatorios(5), false));
+            AltaPublicacion(new Venta("Venta 5", EstadoPublicacion.CERRADA, new DateTime(2024, 09, 15), ObtenerArticulosAleatorios(7), true));
             AltaPublicacion(new Venta("Venta 6", EstadoPublicacion.ABIERTA, new DateTime(2024, 08, 20), ObtenerArticulosAleatorios(2), false));
-            AltaPublicacion(new Venta("Venta 7", EstadoPublicacion.ABIERTA, new DateTime(2024, 07, 25), ObtenerArticulosAleatorios(7), true));
+            AltaPublicacion(new Venta("Venta 7", EstadoPublicacion.CANCELADA, new DateTime(2024, 07, 25), ObtenerArticulosAleatorios(7), true));
             AltaPublicacion(new Venta("Venta 8", EstadoPublicacion.ABIERTA, new DateTime(2024, 04, 30), ObtenerArticulosAleatorios(3), false));
-            AltaPublicacion(new Venta("Venta 9", EstadoPublicacion.ABIERTA, new DateTime(2024, 03, 02), ObtenerArticulosAleatorios(7), false));
+            AltaPublicacion(new Venta("Venta 9", EstadoPublicacion.CERRADA, new DateTime(2024, 03, 02), ObtenerArticulosAleatorios(7), false));
             AltaPublicacion(new Venta("Venta 10", EstadoPublicacion.ABIERTA, new DateTime(2024, 04, 05), ObtenerArticulosAleatorios(1), true));
         }
 

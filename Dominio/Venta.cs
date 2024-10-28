@@ -16,5 +16,11 @@ namespace Dominio
         {
             _ofertaRelampago = ofertaRelampago;
         }
+
+        public override double CalcularPrecio()
+        {
+            if (_ofertaRelampago) return base.CalcularPrecio() * 0.8;
+            return base.CalcularPrecio();
+        }
     }
 }

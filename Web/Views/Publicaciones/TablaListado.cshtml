@@ -7,7 +7,33 @@
         <td>@p.Nombre</td>
         <td>$@p.CalcularPrecio()</td>
         <td>@p.Estado</td>
-        <td><a href="/Publicaciones">Botón (S/I)</a></td>
+        <td>
+            @{
+                string enlace = "/Publicaciones/";
+                string clase = "btn btn-";
+                string icono = "fa-solid";
+                string titulo = "Ir a";
+
+                if (p is Venta) {
+                    enlace += $"Comprar?id={p.Id}";
+                    icono += " fa-cart-shopping";
+                    titulo += " comprar";
+                }
+                else
+                {
+                    enlace += $"Subastar?id={p.Id}";
+                    icono += " fa-gavel";
+                    titulo += " ofertar";
+                }
+
+                if (p.Estado == Dominio.Enums.EstadoPublicacion.ABIERTA) clase += "success";
+                if (p.Estado != Dominio.Enums.EstadoPublicacion.ABIERTA) clase += "danger disabled";
+            }
+
+            <a title="@titulo" class="@clase" href="@enlace">
+                <i class="@icono"></i>
+            </a>
+        </td>
     </tr>
 }
 
