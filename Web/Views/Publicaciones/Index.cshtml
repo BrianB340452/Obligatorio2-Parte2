@@ -1,5 +1,4 @@
-﻿@model List<Publicacion>
-@using Dominio
+﻿@using Dominio
 
 @{
     ViewData["Title"] = "Publicaciones";
@@ -42,13 +41,15 @@
     </thead>
 
     <tbody id="tablaPublicaciones">
-        <partial name="TablaListado" model="Model" />
+        
     </tbody>
 </table>
 
 <script>
     document.getElementById("txtFiltro").addEventListener("input", ActualizarTabla);
     document.getElementById("selectEstado").addEventListener("change", ActualizarTabla);
+
+    ActualizarTabla();
 
     function ActualizarTabla() {
         const filtro = document.getElementById("txtFiltro").value;
