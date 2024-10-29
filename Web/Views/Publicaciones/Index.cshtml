@@ -7,12 +7,12 @@
 <!-- Formulario de búsqueda -->
 <div class="row py-3">
     <div class="col-6">
-        <label class="form-label" for="txtFiltro">Buscar</label>
+        <label class="form-label" for="txtNombre">Buscar</label>
         <div class="input-group mb-3">
             <span class="input-group-text" id="basic-addon1">
                 <i class="fa-solid fa-magnifying-glass"></i>
             </span>
-            <input class="form-control" type="text" id="txtFiltro" placeholder="Escribe aquí para buscar..." aria-describedby="basic-addon1" />
+            <input class="form-control" type="text" id="txtNombre" placeholder="Escribe aquí para buscar..." aria-describedby="basic-addon1" />
         </div>
     </div>
     
@@ -46,17 +46,17 @@
 </table>
 
 <script>
-    document.getElementById("txtFiltro").addEventListener("input", ActualizarTabla);
+    document.getElementById("txtNombre").addEventListener("input", ActualizarTabla);
     document.getElementById("selectEstado").addEventListener("change", ActualizarTabla);
 
     ActualizarTabla();
 
     function ActualizarTabla() {
-        const filtro = document.getElementById("txtFiltro").value;
+        const nombre = document.getElementById("txtNombre").value;
         const estado = document.getElementById("selectEstado").value;
 
         // Hago la petición de manera asíncrona para que no se reinicie la página.
-        fetch(`/Publicaciones/BuscarPublicaciones?estado=${estado}&filtro=${filtro}`)
+        fetch(`/Publicaciones/Buscar?estado=${estado}&nombre=${nombre}`)
             // Obtengo la respuesta y la transformo en texto.
             .then(response => response.text())
 

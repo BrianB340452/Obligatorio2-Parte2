@@ -7,13 +7,12 @@ public class PublicacionesController : Controller
 
     public IActionResult Index()
     {
-        List<Publicacion> publicaciones = sistema.Publicaciones;
-        return View(publicaciones);
+        return View();
     }
 
-    public PartialViewResult BuscarPublicaciones(string filtro, int estado)
+    public PartialViewResult Buscar(string nombre, int estado)
     {
-        List<Publicacion> publicaciones = sistema.ListarPublicacionesFiltradas(filtro, estado);
-        return PartialView("TablaListado", publicaciones);
+        ViewBag.publicaciones = sistema.ListarPublicacionesFiltradas(nombre, estado);
+        return PartialView();
     }
 }
