@@ -2,7 +2,7 @@
 
 @foreach (Publicacion p in ViewBag.publicaciones)
 {
-    <tr>
+    <tr class="align-middle">
         <td>@p.Nombre</td>
         <td>$@p.CalcularPrecio()</td>
         <td>@p.Estado</td>
