@@ -4,22 +4,27 @@ namespace Dominio
 {
     public class Venta : Publicacion
     {
-        private bool _ofertaRelampago;
+        #region ATRIBUTOS
+        public bool OfertaRelampago { get; set; }
+        #endregion
 
+        #region CONSTRUCTORES
         public Venta(string nombre, EstadoPublicacion estado, DateTime fechaPublicacion, bool ofertaRelampago) : base(nombre, estado, fechaPublicacion)
         {
-            _ofertaRelampago = ofertaRelampago;
+            OfertaRelampago = ofertaRelampago;
         }
 
         // Constructor sólo para precargas
         public Venta(string nombre, EstadoPublicacion estado, DateTime fechaPublicacion, List<Articulo> articulos, bool ofertaRelampago) : base(nombre, estado, fechaPublicacion, articulos)
         {
-            _ofertaRelampago = ofertaRelampago;
+            OfertaRelampago = ofertaRelampago;
         }
+        #endregion
 
+        #region OVERRIDES
         public override double CalcularPrecio()
         {
-            if (_ofertaRelampago) return base.CalcularPrecio() * 0.8;
+            if (OfertaRelampago) return base.CalcularPrecio() * 0.8;
             return base.CalcularPrecio();
         }
 
@@ -37,5 +42,6 @@ namespace Dominio
         {
             return "Ir a comprar";
         }
+        #endregion
     }
 }

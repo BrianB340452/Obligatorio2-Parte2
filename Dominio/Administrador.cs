@@ -2,8 +2,8 @@
 {
     public class Administrador : Usuario
     {
-        public Administrador(string nombre, string apellido, string email, string clave) : base(nombre, apellido, email, clave)
-        {
-        }
+        #region CONSTRUCTORES
+        public Administrador(string nombre, string apellido, string email, string clave) : base(nombre, apellido, email, clave) {}
+        #endregion
     }
 }

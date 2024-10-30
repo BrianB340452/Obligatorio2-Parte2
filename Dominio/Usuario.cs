@@ -4,33 +4,34 @@ namespace Dominio
 {
     public abstract class Usuario : IValidable
     {
-        protected int _id;
+        #region ATRIBUTOS
         private static int s_ultId = 1;
-        protected string _nombre;
-        protected string _apellido;
-        protected string _email;
-        protected string _clave;
+        public int Id { get; set; }
+        public string Nombre { get; set; }
+        public string Apellido { get; set; }
+        public string Email { get; set; }
+        public string Clave { get; set; }
+        #endregion
 
+        #region CONSTRUCTORES
         public Usuario(string nombre, string apellido, string email, string clave)
         {
-            _id = s_ultId++;
-            _nombre = nombre;
-            _apellido = apellido;
-            _email = email;
-            _clave = clave;
+            Id = s_ultId++;
+            Nombre = nombre;
+            Apellido = apellido;
+            Email = email;
+            Clave = clave;
         }
+        #endregion
 
+        #region MÉTODOS Y FUNCIONES
         public virtual void Validar()
         {
-            if (string.IsNullOrEmpty(_nombre)) throw new Exception("El nombre no puede estar vacío.");
-            if (string.IsNullOrEmpty(_apellido)) throw new Exception("El apellido no puede estar vacío.");
-            if (!EmailValido(_email)) throw new Exception("El email ingresado es inválido.");
-            if (_clave.Length < 4) throw new Exception("La contraseña debe contener un mínimo de 4 caracteres.");
+            if (string.IsNullOrEmpty(Nombre)) throw new Exception("El nombre no puede estar vacío.");
+            if (string.IsNullOrEmpty(Apellido)) throw new Exception("El apellido no puede estar vacío.");
+            if (!EmailValido(Email)) throw new Exception("El email ingresado es inválido.");
+            if (Clave.Length < 4) throw new Exception("La contraseña debe contener un mínimo de 4 caracteres.");
         }
-
-        public int Id { get { return _id; } }
-        public string Nombre { get { return _nombre; } }
-        public string Email { get { return _email; } }
 
         private bool EmailValido(string email)
         {
@@ -42,11 +43,14 @@ namespace Dominio
 
             return true;
         }
+        #endregion
 
+        #region OVERRIDES
         public override bool Equals(object? obj)
         {
             Usuario u = obj as Usuario;
-            return u != null && this._email == u._email;
+            return u != null && this.Email == u.Email;
         }
+        #endregion
     }
 }

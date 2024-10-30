@@ -4,40 +4,44 @@ namespace Dominio
 {
     public class Articulo : IValidable
     {
-        private int _id;
+        #region ATRIBUTOS
         private static int s_ultId = 1;
-        private string _nombre;
-        private string _categoria;
-        private double _precio;
+        public int Id { get; set; }
+        public string Nombre { get; set; }
+        public string Categoria { get; set; }
+        public double Precio { get; set; }
+        #endregion
 
+        #region CONSTRUCTORES
         public Articulo(string nombre, string categoria, double precio)
         {
-            _id = s_ultId++;
-            _nombre = nombre;
-            _categoria = categoria;
-            _precio = precio;
+            Id = s_ultId++;
+            Nombre = nombre;
+            Categoria = categoria;
+            Precio = precio;
         }
+        #endregion
 
-        public int Id { get { return _id; } }
-        public string Categoria { get { return _categoria; } }
-        public double Precio { get { return _precio; } }
-
+        #region MÉTODOS Y FUNCIONES
         public void Validar()
         {
-            if (string.IsNullOrEmpty(_nombre)) throw new Exception("El nombre no puede estar vacío.");
-            if (string.IsNullOrEmpty(_categoria)) throw new Exception("La categoría no puede estar vacía.");
-            if (_precio <= 0) throw new Exception("El precio debe ser mayor a $0.");
+            if (string.IsNullOrEmpty(Nombre)) throw new Exception("El nombre no puede estar vacío.");
+            if (string.IsNullOrEmpty(Categoria)) throw new Exception("La categoría no puede estar vacía.");
+            if (Precio <= 0) throw new Exception("El precio debe ser mayor a $0.");
         }
+        #endregion
 
+        #region OVERRIDES
         public override string ToString()
         {
-            return $"Artículo Nº{_id}: {_nombre} - ${_precio}";
+            return $"Artículo Nº{Id}: {Nombre} - ${Precio}";
         }
 
         public override bool Equals(object? obj)
         {
             Articulo a = obj as Articulo;
-            return a != null && this._nombre == a._nombre && this._categoria == a._categoria && this._precio == a._precio;
+            return a != null && this.Nombre == a.Nombre && this.Categoria == a.Categoria && this.Precio == a.Precio;
         }
+        #endregion
     }
 }

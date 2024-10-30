@@ -4,30 +4,32 @@ namespace Dominio
 {
     public class Oferta : IValidable
     {
-        private int _id;
+        #region ATRIBUTOS
         private static int s_ultId = 1;
-        private Cliente _cliente;
-        private double _monto;
-        private DateTime _fechaRealizada;
+        public int Id { get; set; }
+        public Cliente Cliente { get; set; }
+        public double Monto { get; set; }
+        public DateTime FechaRealizada { get; set; }
+        #endregion
 
+        #region CONSTRUCTORES
         public Oferta(Cliente cliente, double monto, DateTime fechaRealizada)
         {
-            _id = s_ultId++;
-            _cliente = cliente;
-            _monto = monto;
-            _fechaRealizada = fechaRealizada;
+            Id = s_ultId++;
+            Cliente = cliente;
+            Monto = monto;
+            FechaRealizada = fechaRealizada;
         }
+        #endregion
 
-        public double Monto { get { return _monto; } }
-
-        public Cliente Cliente { get { return _cliente; } }
-
+        #region MÉTODOS Y FUNCIONES
         public void Validar()
         {
-            if (_cliente == null) throw new Exception("El cliente no puede ser nulo.");
-            _cliente.Validar();
-            if (_monto <= 0) throw new Exception("El monto debe ser mayor a $0.");
-            if (_fechaRealizada < new DateTime(2024, 1, 1) || _fechaRealizada > DateTime.Today) throw new Exception("La fecha realizada es inválida.");
+            if (Cliente == null) throw new Exception("El cliente no puede ser nulo.");
+            Cliente.Validar();
+            if (Monto <= 0) throw new Exception("El monto debe ser mayor a $0.");
+            if (FechaRealizada < new DateTime(2024, 1, 1) || FechaRealizada > DateTime.Today) throw new Exception("La fecha realizada es inválida.");
         }
+        #endregion
     }
 }

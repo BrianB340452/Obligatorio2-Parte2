@@ -2,13 +2,25 @@
 {
     public class Cliente : Usuario
     {
-        private double _saldo;
+        #region ATRIBUTOS
+        public double Saldo { get; set; }
+        #endregion
 
+        #region CONSTRUCTORES
         public Cliente(string nombre, string apellido, string email, string clave, double saldo) : base(nombre, apellido, email, clave)
         {
-            _saldo = saldo;
+            Saldo = saldo;
         }
+        #endregion
 
+        #region MÉTODOS Y FUNCIONES
+        private void ValidarSaldo()
+        {
+            if (Saldo < 0) throw new Exception("El saldo debe ser un monto positivo.");
+        }
+        #endregion
+
+        #region OVERRIDES
         public override void Validar()
         {
             base.Validar();
@@ -17,12 +29,8 @@
 
         public override string ToString()
         {
-            return $"{_id}: {_nombre} {_apellido} | {_email} | ${_saldo}";
+            return $"{Id}: {Nombre} {Apellido} | {Email} | ${Saldo}";
         }
-        
-        private void ValidarSaldo()
-        {
-            if (_saldo < 0) throw new Exception("El saldo debe ser un monto positivo.");
-        }
+        #endregion
     }
 }
