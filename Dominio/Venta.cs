@@ -22,5 +22,20 @@ namespace Dominio
             if (_ofertaRelampago) return base.CalcularPrecio() * 0.8;
             return base.CalcularPrecio();
         }
+
+        public override string EnlaceWeb()
+        {
+            return $"/Publicaciones/Venta/{Id}";
+        }
+
+        public override string IconoWeb()
+        {
+            return "fa-solid fa-cart-shopping";
+        }
+
+        public override string TituloWeb()
+        {
+            return "Ir a comprar";
+        }
     }
 }

@@ -119,6 +119,20 @@ namespace Dominio
             return null;
         }
 
+        public Venta BuscarVentaPorId(int id)
+        {
+            foreach (Publicacion p in _listaPublicaciones)
+            {
+                if (p.Id == id)
+                {
+                    if (p is Venta) return (Venta)p;
+                    return null;
+                }
+            }
+
+            return null;
+        }
+
         public Cliente BuscarClientePorId(int id)
         {
             foreach (Usuario u in _listaUsuarios)

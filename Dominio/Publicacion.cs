@@ -5,41 +5,46 @@ namespace Dominio
 {
     public abstract class Publicacion : IValidable
     {
-        protected int _id;
-        private static int s_ultId = 1;
-        protected string _nombre;
-        protected EstadoPublicacion _estado;
-        protected DateTime _fechaPublicacion;
+        #region ATRIBUTOS
         protected List<Articulo> _articulos = new List<Articulo>();
-        protected Cliente _clienteComprador;
-        protected Usuario _usuarioFinalizador;
-        protected DateTime _fechaFinalizada;
+        private static int s_ultId = 1;
 
+        public int Id { get; set; }
+        public string Nombre { get; set; }
+        public EstadoPublicacion Estado { get; set; }
+        public DateTime FechaPublicacion { get; set; }
+        public Cliente ClienteComprador { get; set; }
+        public Usuario UsuarioFinalizador { get; set; }
+        public DateTime FechaFinalizada { get; set; }
+        public List<Articulo> Articulos { get { return _articulos; } }
+        #endregion
+
+        #region CONSTRUCTORES
         protected Publicacion(string nombre, EstadoPublicacion estado, DateTime fechaPublicacion)
         {
-            _id = s_ultId++;
-            _nombre = nombre;
-            _estado = estado;
-            _fechaPublicacion = fechaPublicacion;
+            Id = s_ultId++;
+            Nombre = nombre;
+            Estado = estado;
+            FechaPublicacion = fechaPublicacion;
         }
 
         // Constructor sólo para precargas
         protected Publicacion(string nombre, EstadoPublicacion estado, DateTime fechaPublicacion, List<Articulo> articulos)
         {
-            _id = s_ultId++;
-            _nombre = nombre;
-            _estado = estado;
-            _fechaPublicacion = fechaPublicacion;
+            Id = s_ultId++;
+            Nombre = nombre;
+            Estado = estado;
+            FechaPublicacion = fechaPublicacion;
             _articulos = articulos;
         }
+        #endregion
 
-        public int Id { get { return _id; } }
-        public string Nombre { get { return _nombre; } }
-        public EstadoPublicacion Estado { get { return _estado; } }
-
-        public List<Articulo> Articulos {  get { return _articulos; } }
-
-        public DateTime FechaPublicacion { get { return _fechaPublicacion; } }
+        #region MÉTODOS Y FUNCIONES
+        public virtual void Validar()
+        {
+            if (string.IsNullOrEmpty(Nombre)) throw new Exception("El nombre no puede estar vacío.");
+            if (FechaPublicacion < new DateTime(2024, 1, 1) || FechaPublicacion > DateTime.Today) throw new Exception("La fecha de publicación es inválida.");
+        }
 
         public virtual void AgregarArticulo(Articulo articulo)
         {
@@ -49,17 +54,11 @@ namespace Dominio
             _articulos.Add(articulo);
         }
 
-        public virtual void Validar()
-        {
-            if (string.IsNullOrEmpty(_nombre)) throw new Exception("El nombre no puede estar vacío.");
-            if (_fechaPublicacion < new DateTime(2024, 1, 1) || _fechaPublicacion > DateTime.Today) throw new Exception("La fecha de publicación es inválida.");
-        }
-
         public virtual double CalcularPrecio()
         {
             double precioFinal = 0;
 
-            foreach (Articulo a in Articulos)
+            foreach (Articulo a in _articulos)
             {
                 precioFinal += a.Precio;
             }
@@ -67,9 +66,22 @@ namespace Dominio
             return precioFinal;
         }
 
+        public string ClaseBtnWeb()
+        {
+            if (Estado != EstadoPublicacion.ABIERTA) return "btn btn-danger disabled";
+            return "btn btn-success";
+        }
+
+        public abstract string EnlaceWeb();
+        public abstract string IconoWeb();
+        public abstract string TituloWeb();
+        #endregion
+
+        #region OVERRIDES
         public override string ToString()
         {
-            return $"Nº{_id}: {_nombre} | Estado: {_estado} | Fecha publicación: {_fechaPublicacion.ToShortDateString()}";
+            return $"Nº{Id}: {Nombre} | Estado: {Estado} | Fecha publicación: {FechaPublicacion.ToShortDateString()}";
         }
+        #endregion
     }
 }
