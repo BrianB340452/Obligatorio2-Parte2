@@ -318,7 +318,7 @@ namespace Dominio
 
             foreach (Usuario u in _listaUsuarios)
             {
-                if (u.Email == email && u.Clave == clave)
+                if (u.Email.ToLower() == email.ToLower() && u.Clave == clave)
                 {
                     UsuarioActual = u;
                     return;
