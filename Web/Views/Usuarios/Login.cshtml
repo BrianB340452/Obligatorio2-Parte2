@@ -19,7 +19,7 @@
                 </div>
             </div>
 
-            <div class="form-group mb-5 mt-4">
+            <div class="form-group mb-4 mt-4">
                 <label class="form-label fs-5" for="txtClave">Contraseña</label>
 
                 <div class="input-group">
@@ -29,6 +29,14 @@
 
                     <input placeholder="Ingrese aquí su contraseña" required type="password" name="Clave" id="txtClave" class="form-control form-control-lg" />
                 </div>
+
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show my-4" role="alert">
+                        @ViewBag.Error
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
             </div>
 
             <div class="form-group mb-5">

@@ -10,7 +10,6 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            ViewBag.Error = TempData["Error"];
             return View();
         }
 
@@ -31,7 +30,7 @@ namespace Web.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Error"] = ex.Message;
+                ViewBag.Error = ex.Message;
                 return View("Login");
             }
         }
