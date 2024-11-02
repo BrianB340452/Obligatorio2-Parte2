@@ -5,6 +5,7 @@ public class PublicacionesController : Controller
 {
     private Sistema sistema = Sistema.Instancia;
 
+    [HttpGet]
     public IActionResult Index(string nombre, int estado)
     {
         ViewBag.publicaciones = sistema.ListarPublicacionesFiltradas(nombre, estado);
@@ -14,12 +15,14 @@ public class PublicacionesController : Controller
         return View();
     }
 
+    [HttpGet]
     public IActionResult Venta(int id)
     {
         ViewBag.venta = sistema.BuscarVentaPorId(id);
         return View();
     }
 
+    [HttpGet]
     public IActionResult Subasta(int id)
     {
         ViewBag.subasta = sistema.BuscarSubastaPorId(id);

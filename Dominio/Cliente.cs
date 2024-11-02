@@ -27,6 +27,11 @@
             ValidarSaldo();
         }
 
+        public override char TipoUsuario()
+        {
+            return 'C';
+        }
+
         public override string ToString()
         {
             return $"{Id}: {Nombre} {Apellido} | {Email} | ${Saldo}";

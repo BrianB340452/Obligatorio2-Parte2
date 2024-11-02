@@ -5,6 +5,7 @@ namespace Dominio
     public class Sistema
     {
         #region ATRIBUTOS
+        public Usuario UsuarioActual { get; set; }
         private List<Usuario> _listaUsuarios = new List<Usuario>();
         private List<Articulo> _listaArticulos = new List<Articulo>();
         private List<Publicacion> _listaPublicaciones = new List<Publicacion>();
@@ -51,6 +52,14 @@ namespace Dominio
             usuario.Validar();
             if (_listaUsuarios.Contains(usuario)) throw new Exception("El usuario ingresado ya existe.");
             _listaUsuarios.Add(usuario);
+        }
+
+        public void AltaCliente(Cliente cliente)
+        {
+            if (cliente == null) throw new Exception("El cliente no puede ser nulo.");
+            cliente.Validar();
+            if (_listaUsuarios.Contains(cliente)) throw new Exception("El cliente ingresado ya existe.");
+            _listaUsuarios.Add(cliente);
         }
 
         public void AltaPublicacion(Publicacion publicacion)
@@ -297,6 +306,26 @@ namespace Dominio
             }
 
             return publicaciones;
+        }
+        #endregion
+
+        #region OTROS MÉTODOS
+        public void IniciarSesion(string email, string clave)
+        {
+            if (string.IsNullOrEmpty(clave) && string.IsNullOrEmpty(email)) throw new Exception("El email y la contraseña no pueden estar vacíos.");
+            if (string.IsNullOrEmpty(email)) throw new Exception("El email no puede estar vacío.");
+            if (string.IsNullOrEmpty(clave)) throw new Exception("La contraseña no puede estar vacía.");
+
+            foreach (Usuario u in _listaUsuarios)
+            {
+                if (u.Email == email && u.Clave == clave)
+                {
+                    UsuarioActual = u;
+                    return;
+                }
+            }
+
+            throw new Exception("El email y/o la contraseña son incorrectos.");
         }
         #endregion
 

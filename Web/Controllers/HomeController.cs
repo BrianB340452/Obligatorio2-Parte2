@@ -1,3 +1,4 @@
+using Dominio;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Web.Models;
@@ -6,6 +7,7 @@ namespace Web.Controllers
 {
     public class HomeController : Controller
     {
+        private Sistema sistema = Sistema.Instancia;
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)
@@ -15,6 +17,7 @@ namespace Web.Controllers
 
         public IActionResult Index()
         {
+            if (sistema.UsuarioActual == null) return RedirectToAction("Index", "Usuarios");
             return View();
         }
 

@@ -33,6 +33,8 @@ namespace Dominio
             if (Clave.Length < 4) throw new Exception("La contraseña debe contener un mínimo de 4 caracteres.");
         }
 
+        public abstract char TipoUsuario();
+
         private bool EmailValido(string email)
         {
             if (string.IsNullOrEmpty(email)) return false;
