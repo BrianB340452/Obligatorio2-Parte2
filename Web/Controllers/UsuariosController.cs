@@ -17,6 +17,7 @@ namespace Web.Controllers
         public IActionResult Login()
         {
             if (sistema.UsuarioActual != null) return RedirectToAction("Index", "Home");
+            ViewBag.Exito = TempData["Exito"];
             return View();
         }
 
@@ -32,6 +33,29 @@ namespace Web.Controllers
             {
                 ViewBag.Error = ex.Message;
                 return View("Login");
+            }
+        }
+
+        [HttpGet]
+        public IActionResult Registro()
+        {
+            if (sistema.UsuarioActual != null) return RedirectToAction("Index", "Home");
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Registro(string Nombre, string Apellido, string Email, string Clave)
+        {
+            try
+            {
+                sistema.AltaCliente(Nombre, Apellido, Email, Clave);
+                TempData["Exito"] = "¡Registro exitoso!";
+                return RedirectToAction("Login", "Usuarios");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
+                return View("Registro");
             }
         }
 

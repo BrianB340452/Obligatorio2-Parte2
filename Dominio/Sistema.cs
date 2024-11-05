@@ -54,12 +54,20 @@ namespace Dominio
             _listaUsuarios.Add(usuario);
         }
 
-        public void AltaCliente(Cliente cliente)
+        public void AltaCliente(string Nombre, string Apellido, string Email, string Clave)
         {
-            if (cliente == null) throw new Exception("El cliente no puede ser nulo.");
-            cliente.Validar();
-            if (_listaUsuarios.Contains(cliente)) throw new Exception("El cliente ingresado ya existe.");
-            _listaUsuarios.Add(cliente);
+            try
+            {
+                Cliente c = new Cliente(Nombre, Apellido, Email, Clave, 2000);
+                if (_listaUsuarios.Contains(c)) throw new Exception("El email ingresado ya está registrado.");
+                c.Validar();
+                _listaUsuarios.Add(c);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            
         }
 
         public void AltaPublicacion(Publicacion publicacion)

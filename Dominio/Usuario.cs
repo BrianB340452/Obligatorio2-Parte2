@@ -29,7 +29,7 @@ namespace Dominio
         {
             if (string.IsNullOrEmpty(Nombre)) throw new Exception("El nombre no puede estar vacío.");
             if (string.IsNullOrEmpty(Apellido)) throw new Exception("El apellido no puede estar vacío.");
-            if (!EmailValido(Email)) throw new Exception("El email ingresado es inválido.");
+            if (!EmailValido(Email)) throw new Exception("El email ingresado no es válido.");
             if (Clave.Length < 4) throw new Exception("La contraseña debe contener un mínimo de 4 caracteres.");
         }
 
@@ -51,7 +51,7 @@ namespace Dominio
         public override bool Equals(object? obj)
         {
             Usuario u = obj as Usuario;
-            return u != null && this.Email == u.Email;
+            return u != null && this.Email.ToLower() == u.Email.ToLower();
         }
         #endregion
     }
