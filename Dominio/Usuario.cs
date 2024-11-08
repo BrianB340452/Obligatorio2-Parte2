@@ -29,11 +29,13 @@ namespace Dominio
         {
             if (string.IsNullOrEmpty(Nombre)) throw new Exception("El nombre no puede estar vacío.");
             if (string.IsNullOrEmpty(Apellido)) throw new Exception("El apellido no puede estar vacío.");
+            if (string.IsNullOrEmpty(Email)) throw new Exception("El correo no puede estar vacío.");
+            if (string.IsNullOrEmpty(Clave)) throw new Exception("La contraseña no puede estar vacía.");
             if (!EmailValido(Email)) throw new Exception("El email ingresado no es válido.");
-            if (Clave.Length < 4) throw new Exception("La contraseña debe contener un mínimo de 4 caracteres.");
+            if (Clave.Length < 8) throw new Exception("La contraseña debe contener un mínimo de 8 caracteres.");
         }
 
-        public abstract char TipoUsuario();
+        public abstract string TipoUsuario();
 
         private bool EmailValido(string email)
         {

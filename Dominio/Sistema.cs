@@ -5,7 +5,6 @@ namespace Dominio
     public class Sistema
     {
         #region ATRIBUTOS
-        public Usuario UsuarioActual { get; set; }
         private List<Usuario> _listaUsuarios = new List<Usuario>();
         private List<Articulo> _listaArticulos = new List<Articulo>();
         private List<Publicacion> _listaPublicaciones = new List<Publicacion>();
@@ -166,6 +165,8 @@ namespace Dominio
         #endregion
 
         #region LISTADOS
+
+        #region CLIENTES
         //Listado de clientes filtrando la lista usuarios.
         public List<Cliente> ListarClientes()
         {
@@ -198,7 +199,9 @@ namespace Dominio
 
             return clientes;
         }
+        #endregion
 
+        #region ARTÍCULOS
         //Listado de las categorías disponibles recorriendo todos los artículos.
         public List<string> ListarCategorias()
         {
@@ -227,7 +230,9 @@ namespace Dominio
 
             return articulos;
         }
+        #endregion
 
+        #region PUBLICACIONES
         //Listado de publicaciones dados su nombre y/o estado.
         public List<Publicacion> ListarPublicacionesFiltradas(string nombre, int estado)
         {
@@ -317,8 +322,96 @@ namespace Dominio
         }
         #endregion
 
+        #region SUBASTAS
+        //Listado de subastas.
+        public List<Subasta> ListarSubastas()
+        {
+            List<Subasta> subastas = new List<Subasta>();
+
+            foreach (Publicacion p in _listaPublicaciones)
+            {
+                if (p is Subasta) subastas.Add((Subasta) p);
+            }
+
+            return subastas;
+        }
+
+        //Listado de subastas dado su nombre y/o estado.
+        public List<Subasta> ListarSubastasFiltradas(string nombre, int estado)
+        {
+            // Si el nombre es vacio y el estado = 0, devuelvo todas las subastas.
+            if (string.IsNullOrEmpty(nombre) && estado == 0) return ListarSubastas();
+
+            // Si el estado = 0, listo las subastas filtradas solo por nombre.
+            if (estado == 0) return ListarSubastasPorNombre(nombre);
+
+            // Guardo el estado de la publicación según el valor de estado.
+            EstadoPublicacion estadoPublicacion = new EstadoPublicacion();
+
+            switch (estado)
+            {
+                case 1:
+                    estadoPublicacion = EstadoPublicacion.ABIERTA;
+                    break;
+                case 2:
+                    estadoPublicacion = EstadoPublicacion.CERRADA;
+                    break;
+                case 3:
+                    estadoPublicacion = EstadoPublicacion.CANCELADA;
+                    break;
+                default:
+                    break;
+            }
+
+
+            // Si el nombre es vacío pero el estado es != 0, listo las subastas filtradas solo por estado.
+            if (string.IsNullOrEmpty(nombre)) return ListarSubastasPorEstado(estadoPublicacion);
+
+
+            // Si el nombre no es vacío y el estado es != 0, listo las subastas filtradas por nombre y estado.
+            List<Subasta> subastas = new List<Subasta>();
+
+            foreach (Publicacion p in ListarPublicacionesPorEstado(estadoPublicacion))
+            {
+                if (p.Nombre.ToLower().Contains(nombre.ToLower())) subastas.Add((Subasta) p);
+            }
+
+            return subastas;
+        }
+
+        public List<Subasta> ListarSubastasPorNombre(string nombre)
+        {
+            List<Subasta> subastas = new List<Subasta>();
+
+            foreach (Publicacion p in _listaPublicaciones)
+            {
+                if (p is Subasta && p.Nombre.ToLower().Contains(nombre.ToLower())) subastas.Add((Subasta)p);
+            }
+
+            return subastas;
+        }
+
+        public List<Subasta> ListarSubastasPorEstado(EstadoPublicacion estado)
+        {
+            List<Subasta> subastas = new List<Subasta>();
+
+            foreach (Publicacion p in _listaPublicaciones)
+            {
+                if (p is Subasta && p.Estado == estado) subastas.Add((Subasta)p);
+            }
+
+            return subastas;
+        }
+        #endregion
+
+        #region VENTAS
+
+        #endregion
+
+        #endregion
+
         #region OTROS MÉTODOS
-        public void IniciarSesion(string email, string clave)
+        public Usuario IniciarSesion(string email, string clave)
         {
             if (string.IsNullOrEmpty(clave) && string.IsNullOrEmpty(email)) throw new Exception("El email y la contraseña no pueden estar vacíos.");
             if (string.IsNullOrEmpty(email)) throw new Exception("El email no puede estar vacío.");
@@ -328,13 +421,27 @@ namespace Dominio
             {
                 if (u.Email.ToLower() == email.ToLower() && u.Clave == clave)
                 {
-                    UsuarioActual = u;
-                    return;
+                    return u;
                 }
             }
 
             throw new Exception("El email y/o la contraseña son incorrectos.");
         }
+
+        public void CambiarClave(string email, string claveActual, string claveNueva, string claveNuevaRepetida)
+        {
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(claveActual) || string.IsNullOrEmpty(claveNueva) || string.IsNullOrEmpty(claveNuevaRepetida)) throw new Exception("Hay datos sin completar.");
+            if (claveNueva.Length < 8) throw new Exception("La contraseña debe tener una longitud de 8 o más caracteres.");
+
+            Usuario u = IniciarSesion(email, claveActual);
+            if (u == null) throw new Exception("La contraseña actual es incorrecta.");
+
+            if (claveNueva != claveNuevaRepetida) throw new Exception("Las contraseñas ingresadas no coinciden.");
+            if (claveActual == claveNueva) throw new Exception("La contraseña nueva no puede ser la misma que la actual.");
+
+            u.Clave = claveNueva;
+        }
+
         #endregion
 
         #region MÉTODOS AUXILIARES
@@ -412,7 +519,7 @@ namespace Dominio
             AltaUsuario(new Cliente("Pedro", "Perez", "PedroPerez@gmail.com", "pedroPe123", 1900));
             AltaUsuario(new Cliente("Laura", "Gomez", "LauraGomez@gmail.com", "lauraG456", 2500));
             AltaUsuario(new Cliente("Carlos", "Diaz", "CarlosDiaz@gmail.com", "carlosD789", 3200));
-            AltaUsuario(new Cliente("Ana", "Martinez", "AnaMartinez@gmail.com", "anaM101", 1500));
+            AltaUsuario(new Cliente("Ana", "Martinez", "AnaMartinez@gmail.com", "anaM1013", 1500));
             AltaUsuario(new Cliente("Juan", "Lopez", "JuanLopez@gmail.com", "juanL202", 2800));
             AltaUsuario(new Cliente("Maria", "Hernandez", "MariaHernandez@gmail.com", "mariaH303", 4100));
             AltaUsuario(new Cliente("Luis", "Garcia", "LuisGarcia@gmail.com", "luisG404", 1800));

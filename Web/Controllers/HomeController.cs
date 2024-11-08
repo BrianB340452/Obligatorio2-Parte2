@@ -17,7 +17,7 @@ namespace Web.Controllers
 
         public IActionResult Index()
         {
-            if (sistema.UsuarioActual == null) return RedirectToAction("Login", "Usuarios");
+            if (HttpContext.Session.GetString("Email") == null) return RedirectToAction("Login", "Usuarios");
             return View();
         }
 

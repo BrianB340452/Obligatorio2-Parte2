@@ -27,9 +27,9 @@
             ValidarSaldo();
         }
 
-        public override char TipoUsuario()
+        public override string TipoUsuario()
         {
-            return 'C';
+            return "Cliente";
         }
 
         public override string ToString()

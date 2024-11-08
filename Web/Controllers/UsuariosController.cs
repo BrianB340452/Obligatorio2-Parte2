@@ -16,7 +16,9 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            if (sistema.UsuarioActual != null) return RedirectToAction("Index", "Home");
+            // Si ya hay un usuario logueado, redirigir a la página principal usando Session
+            if (HttpContext.Session.GetString("Email") != null) return RedirectToAction("Index", "Home");
+
             ViewBag.Exito = TempData["Exito"];
             return View();
         }
@@ -26,7 +28,11 @@ namespace Web.Controllers
         {
             try
             {
-                sistema.IniciarSesion(Email, Clave);
+                Usuario u = sistema.IniciarSesion(Email, Clave);
+
+                HttpContext.Session.SetString("Email", u.Email);
+                HttpContext.Session.SetString("Rol", u.TipoUsuario());
+
                 return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)
@@ -39,7 +45,7 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult Registro()
         {
-            if (sistema.UsuarioActual != null) return RedirectToAction("Index", "Home");
+            if (HttpContext.Session.GetString("Email") != null) return RedirectToAction("Index", "Home");
             return View();
         }
 
@@ -50,7 +56,7 @@ namespace Web.Controllers
             {
                 sistema.AltaCliente(Nombre, Apellido, Email, Clave);
                 TempData["Exito"] = "¡Registro exitoso!";
-                return RedirectToAction("Login", "Usuarios");
+                return RedirectToAction("Login");
             }
             catch (Exception ex)
             {
@@ -62,7 +68,7 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult Logout()
         {
-            sistema.UsuarioActual = null;
+            HttpContext.Session.Clear();
             return RedirectToAction("Login");
         }
     }

@@ -7,9 +7,9 @@
         #endregion
 
         #region OVERRIDES
-        public override char TipoUsuario()
+        public override string TipoUsuario()
         {
-            return 'A';
+            return "Administrador";
         }
         #endregion
     }

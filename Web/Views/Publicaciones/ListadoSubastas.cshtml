@@ -1,17 +1,17 @@
 ﻿@using Dominio;
 
 @{
-    ViewData["Title"] = "Publicaciones";
+    ViewData["Title"] = "Subastas";
 }
 
 <!-- Formulario de búsqueda -->
-<form method="get" action="/Publicaciones" class="py-3">
+<form method="get" action="/ListadoSubastas" class="py-3">
     <div class="row">
-        <div class="col-4 my-auto">
+        <div class="col-4">
             <label class="form-label" for="txtNombre">Buscar</label>
         </div>
 
-        <div class="col-4 my-auto">
+        <div class="col-4">
             <label class="form-label" for="selectEstado">Filtrar por estado</label>
         </div>
     </div>
@@ -52,27 +52,29 @@
             <th>Nombre</th>
             <th>Precio</th>
             <th>Estado</th>
+            <th>Publicación</th>
             <th>Acciones</th>
         </tr>
     </thead>
 
     <tbody>
-        @if (ViewBag.publicaciones.Count == 0)
+        @if (ViewBag.subastas.Count == 0)
         {
             <tr>
                 <td class="text-center" colspan="4">No se encontraron resultados</td>
             </tr>
         }
 
-        @foreach (Publicacion p in ViewBag.publicaciones)
+        @foreach (Subasta s in ViewBag.subastas)
         {
             <tr class="align-middle">
-                <td>@p.Nombre</td>
-                <td>$@p.CalcularPrecio()</td>
-                <td>@p.Estado</td>
+                <td>@s.Nombre</td>
+                <td>$@s.CalcularPrecio()</td>
+                <td>@s.Estado</td>
+                <td>@s.FechaPublicacion.ToShortDateString()</td>
                 <td>
-                    <a title="@p.TituloWeb()" class="@p.ClaseBtnWeb()" href="@p.EnlaceWeb()">
-                        <i class="@p.IconoWeb()"></i>
+                    <a title="@s.TituloWeb()" class="@s.ClaseBtnWeb()" href="@s.EnlaceWeb()">
+                        <i class="@s.IconoWeb()"></i>
                     </a>
                 </td>
             </tr>

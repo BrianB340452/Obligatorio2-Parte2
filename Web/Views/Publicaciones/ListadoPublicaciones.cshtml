@@ -1,0 +1,86 @@
+﻿@using Dominio;
+
+@{
+    ViewData["Title"] = "Publicaciones";
+}
+
+<!-- Formulario de búsqueda -->
+<form method="get" action="/ListadoPublicaciones" class="py-3">
+    <div class="row">
+        <div class="col-4">
+            <label class="form-label" for="txtNombre">Buscar</label>
+        </div>
+
+        <div class="col-4">
+            <label class="form-label" for="selectEstado">Filtrar por estado</label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-4">
+            <div class="input-group">
+                <span class="input-group-text">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+
+                <input class="form-control" type="text" name="nombre" value="@ViewBag.nombre" placeholder="Escriba el nombre..." id="txtNombre" autocomplete="off" />
+            </div>
+        </div>
+
+        <div class="col-4">
+            <select name="estado" id="selectEstado" class="form-select">
+                <option value="0">Cualquiera</option>
+                <option value="1">Abierta</option>
+                <option value="2">Cerrada</option>
+                <option value="3">Cancelada</option>
+            </select>
+        </div>
+
+        <div class="col-4">
+            <button class="btn btn-primary" type="submit">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                Buscar
+            </button>
+        </div>
+    </div>
+</form>
+
+<!-- Tabla de resultados -->
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (ViewBag.publicaciones.Count == 0)
+        {
+            <tr>
+                <td class="text-center" colspan="4">No se encontraron resultados</td>
+            </tr>
+        }
+
+        @foreach (Publicacion p in ViewBag.publicaciones)
+        {
+            <tr class="align-middle">
+                <td>@p.Nombre</td>
+                <td>$@p.CalcularPrecio()</td>
+                <td>@p.Estado</td>
+                <td>
+                    <a title="@p.TituloWeb()" class="@p.ClaseBtnWeb()" href="@p.EnlaceWeb()">
+                        <i class="@p.IconoWeb()"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    // Guarda la selección del filtro de estado cada vez que se recarga la página.
+    document.getElementById("selectEstado").value = @ViewBag.estado
+</script>
