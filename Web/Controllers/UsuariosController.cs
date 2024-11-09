@@ -8,15 +8,9 @@ namespace Web.Controllers
         private Sistema sistema = Sistema.Instancia;
 
         [HttpGet]
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        [HttpGet]
         public IActionResult Login()
         {
-            // Si ya hay un usuario logueado, redirigir a la página principal usando Session
+            // Si ya hay un usuario logueado, redirigir a la página principal
             if (HttpContext.Session.GetString("Email") != null) return RedirectToAction("Index", "Home");
 
             ViewBag.Exito = TempData["Exito"];
@@ -26,6 +20,9 @@ namespace Web.Controllers
         [HttpPost]
         public IActionResult Login(string Email, string Clave)
         {
+            // Si ya hay un usuario logueado, redirigir a la página principal
+            if (HttpContext.Session.GetString("Email") != null) return RedirectToAction("Index", "Home");
+
             try
             {
                 Usuario u = sistema.IniciarSesion(Email, Clave);
@@ -45,13 +42,18 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult Registro()
         {
+            // Si ya hay un usuario logueado, redirigir a la página principal
             if (HttpContext.Session.GetString("Email") != null) return RedirectToAction("Index", "Home");
+
             return View();
         }
 
         [HttpPost]
         public IActionResult Registro(string Nombre, string Apellido, string Email, string Clave)
         {
+            // Si ya hay un usuario logueado, redirigir a la página principal
+            if (HttpContext.Session.GetString("Email") != null) return RedirectToAction("Index", "Home");
+
             try
             {
                 sistema.AltaCliente(Nombre, Apellido, Email, Clave);
@@ -68,6 +70,7 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult Logout()
         {
+            // Se borran los datos de la sesión actual y se redirige al login
             HttpContext.Session.Clear();
             return RedirectToAction("Login");
         }

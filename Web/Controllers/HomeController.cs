@@ -15,14 +15,11 @@ namespace Web.Controllers
             _logger = logger;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetString("Email") == null) return RedirectToAction("Login", "Usuarios");
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
+            // Autorizaciones
+            if (HttpContext.Session.GetString("Rol") == null) return RedirectToAction("Login", "Usuarios");
             return View();
         }
 

@@ -45,12 +45,8 @@ namespace Dominio
         #region OVERRIDES
         public override double CalcularPrecio()
         {
-            if (_ofertas != null && _ofertas.Count != 0)
-            {
-                return _ofertas.Last().Monto;
-            }
-
-            return base.CalcularPrecio();
+            if (_ofertas != null && _ofertas.Count != 0) return _ofertas.Last().Monto;
+            return 0;
         }
 
         public override string EnlaceWeb()
