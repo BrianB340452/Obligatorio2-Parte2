@@ -54,4 +54,25 @@ public class PublicacionesController : Controller
         ViewBag.subasta = sistema.BuscarSubastaPorId(id);
         return View();
     }
+
+    [HttpPost]
+     public IActionResult Subasta(int idSubasta, int idCliente, double oferta)
+    {
+        // Autorizaciones
+        if (HttpContext.Session.GetString("Rol") == null) return RedirectToAction("Login", "Usuarios");
+        if (HttpContext.Session.GetString("Rol") != "Cliente") return View("Unauthorized");
+
+        try
+        {
+            ViewBag.subasta = sistema.BuscarSubastaPorId(idSubasta);
+            sistema.AgregarOfertaASubasta(idCliente, idSubasta, oferta, DateTime.Now);
+            ViewBag.Exito = "Su oferta se ha procesado exitosamente.";
+            return View();
+        }
+        catch (Exception ex)
+        {
+            ViewBag.Error = ex.Message;
+            return View();
+        }
+    }
 }

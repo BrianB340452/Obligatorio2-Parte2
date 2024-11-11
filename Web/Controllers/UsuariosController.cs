@@ -13,7 +13,9 @@ namespace Web.Controllers
             // Si ya hay un usuario logueado, redirigir a la página principal
             if (HttpContext.Session.GetString("Email") != null) return RedirectToAction("Index", "Home");
 
+            //Viewbag en caso de éxito al registrarse
             ViewBag.Exito = TempData["Exito"];
+
             return View();
         }
 
@@ -27,6 +29,7 @@ namespace Web.Controllers
             {
                 Usuario u = sistema.IniciarSesion(Email, Clave);
 
+                HttpContext.Session.SetInt32("Id", u.Id);
                 HttpContext.Session.SetString("Email", u.Email);
                 HttpContext.Session.SetString("Rol", u.TipoUsuario());
 
@@ -35,7 +38,7 @@ namespace Web.Controllers
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                return View("Login");
+                return View();
             }
         }
 
@@ -63,7 +66,7 @@ namespace Web.Controllers
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                return View("Registro");
+                return View();
             }
         }
 

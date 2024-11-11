@@ -24,13 +24,14 @@ namespace Dominio
             if (oferta == null) throw new Exception("La oferta no puede ser nula.");
 
             Cliente ultimoClienteEnOfertar = UltimoClienteEnOfertar();
-            if (ultimoClienteEnOfertar != null && ultimoClienteEnOfertar.Id == oferta.Cliente.Id) throw new Exception("Ya tiene la oferta más alta.");
+
+            if (ultimoClienteEnOfertar != null && ultimoClienteEnOfertar.Id == oferta.Cliente.Id) throw new Exception("Su oferta ya es la más alta.");
 
             oferta.Validar();
 
             foreach (Oferta o in _ofertas)
             {
-                if (o.Monto >= oferta.Monto) throw new Exception("La oferta debe ser mayor a la última oferta añadida");
+                if (o.Monto >= oferta.Monto) throw new Exception("Su oferta debe ser mayor a la oferta más alta.");
             }
             
             _ofertas.Add(oferta);
@@ -38,7 +39,8 @@ namespace Dominio
 
         private Cliente UltimoClienteEnOfertar()
         {
-            return _ofertas.Last().Cliente;
+            if (_ofertas.Count > 0) return _ofertas.Last().Cliente;
+            return null;
         }
         #endregion
 

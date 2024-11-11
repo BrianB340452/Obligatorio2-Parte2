@@ -90,7 +90,8 @@ namespace Dominio
         public void AgregarOfertaASubasta(int idCliente, int idSubasta, double monto, DateTime fecha)
         {
             Subasta subasta = BuscarSubastaPorId(idSubasta);
-            if (subasta == null) throw new Exception("La subasta ingresada no existe.");
+            if (subasta == null) throw new Exception("La subasta a la que quiere ofertar no existe.");
+            if (subasta.Estado != EstadoPublicacion.ABIERTA) throw new Exception("La subasta a la que quiere ofertar ya no está disponible.");
 
             Cliente cliente = BuscarClientePorId(idCliente);
 
@@ -588,15 +589,15 @@ namespace Dominio
         private void PrecargarPublicaciones()
         {
             // Constructor solo para precargas (hay otro para las altas que no incluye las listas)
-            AltaPublicacion(new Subasta("Subasta 1", EstadoPublicacion.ABIERTA, new DateTime(2024, 09, 15), ObtenerArticulosAleatorios(2), null));
+            AltaPublicacion(new Subasta("Subasta 1", EstadoPublicacion.ABIERTA, new DateTime(2024, 09, 15), ObtenerArticulosAleatorios(2), new List<Oferta>()));
             AltaPublicacion(new Subasta("Subasta 2", EstadoPublicacion.CERRADA, new DateTime(2024, 09, 18), ObtenerArticulosAleatorios(6), ObtenerOfertasAleatorias()));
-            AltaPublicacion(new Subasta("Subasta 3", EstadoPublicacion.ABIERTA, new DateTime(2024, 09, 20), ObtenerArticulosAleatorios(4), null));
+            AltaPublicacion(new Subasta("Subasta 3", EstadoPublicacion.ABIERTA, new DateTime(2024, 09, 20), ObtenerArticulosAleatorios(4), new List<Oferta>()));
             AltaPublicacion(new Subasta("Subasta 4", EstadoPublicacion.ABIERTA, new DateTime(2024, 09, 22), ObtenerArticulosAleatorios(3), ObtenerOfertasAleatorias()));
-            AltaPublicacion(new Subasta("Subasta 5", EstadoPublicacion.CANCELADA, new DateTime(2024, 09, 25), ObtenerArticulosAleatorios(4), null));
+            AltaPublicacion(new Subasta("Subasta 5", EstadoPublicacion.CANCELADA, new DateTime(2024, 09, 25), ObtenerArticulosAleatorios(4), new List<Oferta>()));
             AltaPublicacion(new Subasta("Subasta 6", EstadoPublicacion.CERRADA, new DateTime(2024, 09, 27), ObtenerArticulosAleatorios(2), ObtenerOfertasAleatorias()));
-            AltaPublicacion(new Subasta("Subasta 7", EstadoPublicacion.ABIERTA, new DateTime(2024, 10, 01), ObtenerArticulosAleatorios(1), null));
-            AltaPublicacion(new Subasta("Subasta 8", EstadoPublicacion.ABIERTA, new DateTime(2024, 10, 03), ObtenerArticulosAleatorios(4), null));
-            AltaPublicacion(new Subasta("Subasta 9", EstadoPublicacion.CERRADA, new DateTime(2024, 10, 05), ObtenerArticulosAleatorios(4), null));
+            AltaPublicacion(new Subasta("Subasta 7", EstadoPublicacion.ABIERTA, new DateTime(2024, 10, 01), ObtenerArticulosAleatorios(1), new List<Oferta>()));
+            AltaPublicacion(new Subasta("Subasta 8", EstadoPublicacion.ABIERTA, new DateTime(2024, 10, 03), ObtenerArticulosAleatorios(4), new List<Oferta>()));
+            AltaPublicacion(new Subasta("Subasta 9", EstadoPublicacion.CERRADA, new DateTime(2024, 10, 05), ObtenerArticulosAleatorios(4), new List<Oferta>()));
             AltaPublicacion(new Subasta("Subasta 10", EstadoPublicacion.ABIERTA, new DateTime(2024, 10, 06), ObtenerArticulosAleatorios(6), ObtenerOfertasAleatorias()));
 
             AltaPublicacion(new Venta("Venta 1", EstadoPublicacion.ABIERTA, new DateTime(2024, 10, 01), ObtenerArticulosAleatorios(3), true));
