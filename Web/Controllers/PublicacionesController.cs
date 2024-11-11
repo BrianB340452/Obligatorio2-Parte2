@@ -44,6 +44,27 @@ public class PublicacionesController : Controller
         return View();
     }
 
+    [HttpPost]
+    public IActionResult Venta(int idVenta, int idCliente, double oferta)
+    {
+        // Autorizaciones
+        if (HttpContext.Session.GetString("Rol") == null) return RedirectToAction("Login", "Usuarios");
+        if (HttpContext.Session.GetString("Rol") != "Cliente") return View("Unauthorized");
+
+        try
+        {
+            ViewBag.venta = sistema.BuscarVentaPorId(idVenta);
+            sistema.ProcesarCompra(idCliente, idVenta, DateTime.Now);
+            ViewBag.Exito = "Su compra se ha procesado exitosamente.";
+            return View();
+        }
+        catch (Exception ex)
+        {
+            ViewBag.Error = ex.Message;
+            return View();
+        }
+    }
+
     [HttpGet]
     public IActionResult Subasta(int id)
     {
@@ -65,7 +86,7 @@ public class PublicacionesController : Controller
         try
         {
             ViewBag.subasta = sistema.BuscarSubastaPorId(idSubasta);
-            sistema.AgregarOfertaASubasta(idCliente, idSubasta, oferta, DateTime.Now);
+            sistema.ProcesarOferta(idCliente, idSubasta, oferta, DateTime.Now);
             ViewBag.Exito = "Su oferta se ha procesado exitosamente.";
             return View();
         }

@@ -21,11 +21,29 @@ namespace Dominio
         }
         #endregion
 
+        #region MÉTODOS Y FUNCIONES
+        public void CerrarVenta(Cliente comprador, DateTime fecha)
+        {
+            if (comprador == null) throw new Exception("Cliente inválido.");
+            if (comprador.Saldo < CalcularPrecio()) throw new Exception("Saldo insuficiente.");
+
+            Estado = EstadoPublicacion.CERRADA;
+            UsuarioFinalizador = comprador;
+            ClienteComprador = comprador;
+            comprador.Saldo -= CalcularPrecio();
+        }
+        #endregion
+
         #region OVERRIDES
         public override double CalcularPrecio()
         {
             if (OfertaRelampago) return base.CalcularPrecio() * 0.8;
             return base.CalcularPrecio();
+        }
+
+        public override bool EsOfertaRelampago()
+        {
+            return OfertaRelampago;
         }
 
         public override string EnlaceWeb()

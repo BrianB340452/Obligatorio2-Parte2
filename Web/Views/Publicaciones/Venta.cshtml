@@ -1,7 +1,114 @@
-﻿
+﻿@using Dominio;
+
 @{
-    ViewData["Title"] = "Venta";
+    Venta v = ViewBag.venta;
+    ViewData["Title"] = "Venta " + v.Id;
 }
 
-<h1>Venta</h1>
+@if (ViewBag.Exito != null)
+{
+    <div class="alert alert-success alert-dismissible fade show my-4" role="alert">
+        @ViewBag.Exito
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show my-4" role="alert">
+        @ViewBag.Error
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<h1 class="mb-5">@v.Nombre</h1>
+
+<div class="row">
+    <div class="col-7">
+        <h2>Lista de artículos publicados:</h2>
+
+        <!-- Tabla de resultados -->
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Categoría</th>
+                    <th>Precio</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (v.Articulos.Count == 0)
+                {
+                    <tr>
+                        <td class="text-center" colspan="4">No se encontraron artículos</td>
+                    </tr>
+                }
+
+                @foreach (Articulo a in v.Articulos)
+                {
+                    <tr class="align-middle">
+                        <td>@a.Nombre</td>
+                        <td>@a.Categoria</td>
+                        <td>$@a.Precio</td>
+                    </tr>
+                }
+
+                <tr>
+                    @{
+                        double precioSinDescuento = v.CalcularPrecio() / 0.8;
+                    }
+
+                    @if (v.OfertaRelampago)
+                    {
+                        <td colspan="3">
+                            Precio total: <span class="text-muted text-decoration-line-through font-monospace">$@precioSinDescuento</span>
+                            <span class="fw-bold text-danger font-monospace">$@v.CalcularPrecio()</span>
+                        </td>
+                    }
+                    else
+                    {
+                        <td colspan="3">Precio total: <span class="fw-bold font-monospace">$@v.CalcularPrecio()</span></td>
+                    }
+                </tr>
+
+            </tbody>
+        </table>
+
+        <form method="post" action="/Publicaciones/Venta/@v.Id">
+
+            <input hidden type="number" name="idCliente" value="@Context.Session.GetInt32("Id")" />
+            <input hidden type="number" name="idVenta" value="@v.Id" />
+
+            @if (v.Estado == Dominio.Enums.EstadoPublicacion.ABIERTA)
+            {
+                <button class="btn btn-outline-success form-control-lg mt-4 position-relative" type="submit">
+                    Comprar publicación
+                    @if (v.OfertaRelampago)
+                    {
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            -20%
+                        </span>
+                    }
+                </button>
+            }
+            else
+            {
+                <button disabled class="btn btn-outline-dark form-control-lg mt-4 position-relative disabled" type="submit">
+                    Comprar publicación
+                    @if (v.OfertaRelampago)
+                    {
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            -20%
+                        </span>
+                    }
+                </button>
+            }
+
+            
+        </form>
+    </div>
+
+    <div class="col-5"></div>
+</div>
 

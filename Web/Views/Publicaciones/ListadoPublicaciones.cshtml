@@ -71,8 +71,14 @@
                 <td>$@p.CalcularPrecio()</td>
                 <td>@p.Estado</td>
                 <td>
-                    <a title="@p.TituloWeb()" class="@p.ClaseBtnWeb()" href="@p.EnlaceWeb()">
+                    <a title="@p.TituloWeb()" class="@p.ClaseBtnWeb() position-relative" href="@p.EnlaceWeb()">
                         <i class="@p.IconoWeb()"></i>
+                        @if (p.EsOfertaRelampago() && p.Estado == Dominio.Enums.EstadoPublicacion.ABIERTA)
+                        {
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                -20%
+                            </span>
+                        }
                     </a>
                 </td>
             </tr>

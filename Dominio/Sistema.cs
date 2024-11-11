@@ -86,19 +86,6 @@ namespace Dominio
             Articulo articulo = BuscarArticuloPorId(idArticulo);
             publicacion.AgregarArticulo(articulo);
         }
-
-        public void AgregarOfertaASubasta(int idCliente, int idSubasta, double monto, DateTime fecha)
-        {
-            Subasta subasta = BuscarSubastaPorId(idSubasta);
-            if (subasta == null) throw new Exception("La subasta a la que quiere ofertar no existe.");
-            if (subasta.Estado != EstadoPublicacion.ABIERTA) throw new Exception("La subasta a la que quiere ofertar ya no está disponible.");
-
-            Cliente cliente = BuscarClientePorId(idCliente);
-
-            Oferta oferta = new Oferta(cliente, monto, fecha);
-            subasta.AgregarOferta(oferta);
-        }
-
         #endregion
 
         #region BUSQUEDAS
@@ -441,6 +428,33 @@ namespace Dominio
             if (claveActual == claveNueva) throw new Exception("La contraseña nueva no puede ser la misma que la actual.");
 
             u.Clave = claveNueva;
+        }
+
+        public void ProcesarOferta(int idCliente, int idSubasta, double monto, DateTime fecha)
+        {
+            Subasta subasta = BuscarSubastaPorId(idSubasta);
+            if (subasta == null) throw new Exception("La subasta a la que quiere ofertar no existe.");
+            if (subasta.Estado != EstadoPublicacion.ABIERTA) throw new Exception("La subasta a la que quiere ofertar ya no está disponible.");
+
+            Cliente cliente = BuscarClientePorId(idCliente);
+
+            Oferta oferta = new Oferta(cliente, monto, fecha);
+            oferta.Validar();
+
+            subasta.AgregarOferta(oferta);
+        }
+
+        public void ProcesarCompra(int idCliente, int idVenta, DateTime fecha)
+        {
+            Venta venta = BuscarVentaPorId(idVenta);
+            if (venta == null) throw new Exception("La publicacion que quiere comprar no existe.");
+            if (venta.Estado != EstadoPublicacion.ABIERTA) throw new Exception("La publicacion que quiere comprar ya no está disponible.");
+
+            Cliente cliente = BuscarClientePorId(idCliente);
+            if (cliente == null) throw new Exception("Cliente inválido.");
+            if (cliente.Saldo < venta.CalcularPrecio()) throw new Exception("Saldo insuficiente.");
+
+            venta.CerrarVenta(cliente, fecha);
         }
 
         #endregion

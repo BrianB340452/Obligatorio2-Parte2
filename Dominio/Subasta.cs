@@ -27,8 +27,6 @@ namespace Dominio
 
             if (ultimoClienteEnOfertar != null && ultimoClienteEnOfertar.Id == oferta.Cliente.Id) throw new Exception("Su oferta ya es la más alta.");
 
-            oferta.Validar();
-
             foreach (Oferta o in _ofertas)
             {
                 if (o.Monto >= oferta.Monto) throw new Exception("Su oferta debe ser mayor a la oferta más alta.");
@@ -49,6 +47,11 @@ namespace Dominio
         {
             if (_ofertas != null && _ofertas.Count != 0) return _ofertas.Last().Monto;
             return 0;
+        }
+
+        public override bool EsOfertaRelampago()
+        {
+            return base.EsOfertaRelampago();
         }
 
         public override string EnlaceWeb()

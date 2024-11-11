@@ -72,6 +72,11 @@ namespace Dominio
             return "btn btn-success";
         }
 
+        public virtual bool EsOfertaRelampago()
+        {
+            return false;
+        }
+
         public abstract string EnlaceWeb();
         public abstract string IconoWeb();
         public abstract string TituloWeb();
