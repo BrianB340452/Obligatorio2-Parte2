@@ -46,6 +46,8 @@ namespace Dominio
             if (FechaPublicacion < new DateTime(2024, 1, 1) || FechaPublicacion > DateTime.Today) throw new Exception("La fecha de publicación es inválida.");
         }
 
+        public abstract string TipoPublicacion();
+
         public virtual void AgregarArticulo(Articulo articulo)
         {
             if (articulo == null) throw new Exception("El artículo no puede ser nulo.");

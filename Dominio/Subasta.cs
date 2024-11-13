@@ -40,8 +40,17 @@ namespace Dominio
             if (_ofertas.Count > 0) return _ofertas.Last().Cliente;
             return null;
         }
-        #endregion
 
+        public override string TipoPublicacion()
+        {
+            return "Subasta";
+        }
+
+        public int CompareTo(Subasta other)
+        {
+            return FechaPublicacion.CompareTo(other.FechaPublicacion);
+        }
+        #endregion
         #region OVERRIDES
         public override double CalcularPrecio()
         {

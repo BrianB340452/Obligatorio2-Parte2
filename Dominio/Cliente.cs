@@ -14,9 +14,15 @@
         #endregion
 
         #region MÉTODOS Y FUNCIONES
-        private void ValidarSaldo()
+        public void ValidarSaldo()
         {
             if (Saldo < 0) throw new Exception("El saldo debe ser un monto positivo.");
+        }
+
+        public void RecargarSaldo(int monto)
+        {
+            if (Saldo <= 0) throw new Exception("El saldo a recargar debe ser mayor a $0.");
+            Saldo += monto;
         }
         #endregion
 

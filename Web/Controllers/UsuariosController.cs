@@ -52,16 +52,51 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Registro(string Nombre, string Apellido, string Email, string Clave)
+        public IActionResult Registro(string nombre, string apellido, string email, string clave)
         {
             // Si ya hay un usuario logueado, redirigir a la página principal
             if (HttpContext.Session.GetString("Email") != null) return RedirectToAction("Index", "Home");
 
             try
             {
-                sistema.AltaCliente(Nombre, Apellido, Email, Clave);
+                Cliente c = new Cliente(nombre, apellido, email, clave, 2000);
+                sistema.AltaUsuario(c);
                 TempData["Exito"] = "¡Registro exitoso!";
                 return RedirectToAction("Login");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
+                return View();
+            }
+        }
+
+        [HttpGet]
+        public IActionResult RecargarSaldo()
+        {
+            // Autorizaciones
+            if (HttpContext.Session.GetString("Rol") == null) return RedirectToAction("Login", "Usuarios");
+            if (HttpContext.Session.GetString("Rol") != "Cliente") return View("Unauthorized");
+
+            string? email = HttpContext.Session.GetString("Email");
+            ViewBag.Saldo = sistema.BuscarClientePorEmail(email).Saldo;
+
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult RecargarSaldo(int saldo)
+        {
+            // Autorizaciones
+            if (HttpContext.Session.GetString("Email") == null) return RedirectToAction("Login", "Usuarios");
+            if (HttpContext.Session.GetString("Rol") != "Cliente") return View("Unauthorized");
+
+            try
+            {
+                string? email = HttpContext.Session.GetString("Email");
+                ViewBag.Saldo = sistema.RecargarSaldo(email, saldo);
+                ViewBag.Exito = $"Su recarga de ${saldo} se ha procesado exitosamente.";
+                return View();
             }
             catch (Exception ex)
             {

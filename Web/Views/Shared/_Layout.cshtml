@@ -58,11 +58,14 @@
 
                                         <ul class="dropdown-menu dropdown-menu-end mt-2">
                                             <li><a class="dropdown-item" asp-controller="Usuarios" asp-action="Perfil">Ver perfil</a></li>
+
                                             @if (Context.Session.GetString("Rol") == "Cliente")
                                             {
                                                 <li><a class="dropdown-item" asp-controller="Usuarios" asp-action="RecargarSaldo">Recargar saldo</a></li>
                                             }
+
                                             <li><hr class="dropdown-divider" /></li>
+
                                             <li>
                                                 <a type="button" class="dropdown-item btn text-danger" asp-controller="Usuarios" asp-action="Logout">
                                                     <i class="fa-solid fa-right-from-bracket"></i>

@@ -52,7 +52,7 @@ namespace Dominio
         #region OVERRIDES
         public override bool Equals(object? obj)
         {
-            Usuario u = obj as Usuario;
+            Usuario? u = obj as Usuario;
             return u != null && this.Email.ToLower() == u.Email.ToLower();
         }
         #endregion

@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Recargar saldo";
+}
+
+<h1>Recargar saldo</h1>
+
+@if (ViewBag.Exito != null)
+{
+    <div class="alert alert-success alert-dismissible fade show my-4" role="alert">
+        @ViewBag.Exito
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show my-4" role="alert">
+        @ViewBag.Error
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<form method="post" action="/Usuarios/RecargarSaldo">
+
+    <label class="form-label" for="txtSaldo">Recargas:</label>
+    <div class="input-group">
+        <span class="input-group-text">
+            <i class="fa-solid fa-dollar-sign"></i>
+        </span>
+
+        <input required class="form-control" id="txtSaldo" type="number" name="saldo" min="1" placeholder="Ingrese el saldo a recargar" />
+    </div>
+    @if (ViewBag.saldo != null)
+    {
+        <div class="form-text">Su saldo actual es de $@ViewBag.saldo</div>
+    }
+
+    <input class="btn btn-outline-success form-control-lg mt-4" type="submit" value="Recargar saldo" />
+</form>

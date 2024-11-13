@@ -41,32 +41,8 @@ namespace Dominio
         {
             if (articulo == null) throw new Exception("El artículo no puede ser nulo.");
             articulo.Validar();
-            if (_listaArticulos.Contains(articulo)) throw new Exception("El artículo ingresado ya existe.");
+            if (_listaArticulos.Contains(articulo)) throw new Exception("Ya existe un artículo de las mismas características.");
             _listaArticulos.Add(articulo);
-        }
-      
-        public void AltaUsuario(Usuario usuario)
-        {
-            if (usuario == null) throw new Exception("El usuario no puede ser nulo.");
-            usuario.Validar();
-            if (_listaUsuarios.Contains(usuario)) throw new Exception("El usuario ingresado ya existe.");
-            _listaUsuarios.Add(usuario);
-        }
-
-        public void AltaCliente(string Nombre, string Apellido, string Email, string Clave)
-        {
-            try
-            {
-                Cliente c = new Cliente(Nombre, Apellido, Email, Clave, 2000);
-                if (_listaUsuarios.Contains(c)) throw new Exception("El email ingresado ya está registrado.");
-                c.Validar();
-                _listaUsuarios.Add(c);
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-            
         }
 
         public void AltaPublicacion(Publicacion publicacion)
@@ -74,6 +50,14 @@ namespace Dominio
             if (publicacion == null) throw new Exception("La publicación no puede ser nula.");
             publicacion.Validar();
             _listaPublicaciones.Add(publicacion);
+        }
+
+        public void AltaUsuario(Usuario usuario)
+        {
+            if (usuario == null) throw new Exception("El usuario no puede ser nulo.");
+            usuario.Validar();
+            if (_listaUsuarios.Contains(usuario)) throw new Exception("El email ingresado ya está registrado.");
+            _listaUsuarios.Add(usuario);
         }
         #endregion
 
@@ -89,100 +73,137 @@ namespace Dominio
         #endregion
 
         #region BUSQUEDAS
-        public Articulo BuscarArticuloPorId(int id)
+        public Articulo? BuscarArticuloPorId(int id)
         {
-            foreach (Articulo a in _listaArticulos)
+            int i = 0;
+            Articulo? a = null;
+
+            while (a == null && i < _listaArticulos.Count)
             {
-                if (a.Id == id) return a;
+                Articulo art = _listaArticulos[i];
+
+                // Si el id coincide, guardo el artículo
+                if (art.Id == id) a = art;
+
+                i++;
             }
 
-            return null;
+            return a;
         }
 
-        public Publicacion BuscarPublicacionPorId(int id)
+        public Publicacion? BuscarPublicacionPorId(int id)
         {
-            foreach (Publicacion p in _listaPublicaciones)
+            int i = 0;
+            Publicacion? p = null;
+
+            while (p == null && i < _listaPublicaciones.Count)
             {
-                if (p.Id == id) return p;
+                Publicacion publi = _listaPublicaciones[i];
+
+                // Si el id coincide, guardo la publicacion
+                if (publi.Id == id) p = publi;
+
+                i++;
             }
 
-            return null;
+            return p;
         }
 
-        public Subasta BuscarSubastaPorId(int id)
+        public Subasta? BuscarSubastaPorId(int id)
         {
-            foreach (Publicacion p in _listaPublicaciones)
+            int i = 0;
+            Subasta? s = null;
+
+            while (s == null && i < _listaPublicaciones.Count)
             {
-                if (p.Id == id)
+                Publicacion publi = _listaPublicaciones[i];
+
+                // Si el id coincide y la publicacion es una subasta, la casteo y la guardo
+                if (publi.Id == id && publi.TipoPublicacion() == "Subasta")
                 {
-                    if (p is Subasta) return (Subasta) p;
-                    return null;
+                    s = (Subasta)publi;
                 }
+
+                i++;
             }
 
-            return null;
+            return s;
         }
 
-        public Venta BuscarVentaPorId(int id)
+        public Venta? BuscarVentaPorId(int id)
         {
-            foreach (Publicacion p in _listaPublicaciones)
+            int i = 0;
+            Venta? v = null;
+
+            while (v == null && i < _listaPublicaciones.Count)
             {
-                if (p.Id == id)
+                Publicacion publi = _listaPublicaciones[i];
+
+                // Si el id coincide y la publicacion es una venta, la casteo y la guardo
+                if (publi.Id == id && publi.TipoPublicacion() == "Venta")
                 {
-                    if (p is Venta) return (Venta)p;
-                    return null;
+                    v = (Venta)publi;
                 }
+
+                i++;
             }
 
-            return null;
+            return v;
         }
 
-        public Cliente BuscarClientePorId(int id)
+        public Cliente? BuscarClientePorId(int id)
         {
-            foreach (Usuario u in _listaUsuarios)
+            int i = 0;
+            Cliente? c = null;
+
+            while (c == null && i < _listaUsuarios.Count)
             {
-                if (u.Id == id)
+                Usuario user = _listaUsuarios[i];
+
+                // Si el id coincide y el usuario es un cliente lo casteo y lo guardo
+                if (user.Id == id && user.TipoUsuario() == "Cliente")
                 {
-                    if (u is Cliente) return (Cliente) u;
-                    return null;
+                    c = (Cliente)user;
                 }
+
+                i++;
             }
 
-            return null;
+            return c;
+        }
+
+        public Cliente? BuscarClientePorEmail(string email)
+        {
+            int i = 0;
+            Cliente? c = null;
+
+            while (c == null && i < _listaUsuarios.Count)
+            {
+                Usuario user = _listaUsuarios[i];
+
+                // Si el email coincide y el usuario es un cliente lo casteo y lo guardo
+                if (user.Email.ToLower() == email.ToLower() && user.TipoUsuario() == "Cliente")
+                {
+                    c = (Cliente)user;
+                }
+
+                i++;
+            }
+
+            return c;
         }
         #endregion
 
         #region LISTADOS
 
         #region CLIENTES
-        //Listado de clientes filtrando la lista usuarios.
         public List<Cliente> ListarClientes()
         {
             List<Cliente> clientes = new List<Cliente>();
 
             foreach(Usuario u in _listaUsuarios)
             {
-                if (u is Cliente)
-                {
-                    clientes.Add((Cliente) u);
-                }
-            }
-
-            return clientes;
-        }
-
-        public List<Cliente> ListarClientesPorNombre(string nombre)
-        {
-            if (string.IsNullOrEmpty(nombre)) return ListarClientes();
-
-            List<Cliente> clientes = new List<Cliente>();
-
-            foreach (Usuario u in _listaUsuarios)
-            {
-                if (u is Cliente && u.Nombre.ToLower().Contains(nombre.ToLower()))
-                {
-                    clientes.Add((Cliente)u);
-                }
+                if (u is Cliente) clientes.Add((Cliente)u);
             }
 
             return clientes;
@@ -190,23 +211,18 @@ namespace Dominio
         #endregion
 
         #region ARTÍCULOS
-        //Listado de las categorías disponibles recorriendo todos los artículos.
         public List<string> ListarCategorias()
         {
             List<string> categorias = new List<string>();
 
             foreach (Articulo a in _listaArticulos)
             {
-                if (!categorias.Contains(a.Categoria))
-                {
-                    categorias.Add(a.Categoria);
-                }
+                if (!categorias.Contains(a.Categoria)) categorias.Add(a.Categoria);
             }
 
             return categorias;
         }
 
-        //Listado de artículos dada una categoría específica.
         public List<Articulo> ListarArticulosPorCategoria(string categoria)
         {
             List<Articulo> articulos = new List<Articulo>();
@@ -259,10 +275,7 @@ namespace Dominio
 
             foreach (Publicacion p in ListarPublicacionesPorEstado(estadoPublicacion))
             {
-                if (p.Nombre.ToLower().Contains(nombre.ToLower()))
-                {
-                    publicaciones.Add(p);
-                }
+                if (p.Nombre.ToLower().Contains(nombre.ToLower())) publicaciones.Add(p);
             }
 
             return publicaciones;
@@ -405,15 +418,32 @@ namespace Dominio
             if (string.IsNullOrEmpty(email)) throw new Exception("El email no puede estar vacío.");
             if (string.IsNullOrEmpty(clave)) throw new Exception("La contraseña no puede estar vacía.");
 
-            foreach (Usuario u in _listaUsuarios)
+            int i = 0;
+            Usuario? u = null;
+
+            while (u == null && i < _listaUsuarios.Count)
             {
-                if (u.Email.ToLower() == email.ToLower() && u.Clave == clave)
-                {
-                    return u;
-                }
+                Usuario user = _listaUsuarios[i];
+
+                // Si el email y la clave coinciden lo guardo
+                if (user.Email.ToLower() == email.ToLower() && user.Clave == clave) u = user;
+
+                i++;
             }
 
-            throw new Exception("El email y/o la contraseña son incorrectos.");
+            if (u == null) throw new Exception("El email y/o la contraseña son incorrectos.");
+            return u;
+        }
+
+        public double RecargarSaldo(string email, int monto)
+        {
+            Cliente? c = BuscarClientePorEmail(email);
+            if (c == null) throw new Exception("Cliente inválido.");
+            if (monto <= 0) throw new Exception("El monto a recargar debe ser superior a $0.");
+
+            c.RecargarSaldo(monto);
+
+            return c.Saldo;
         }
 
         public void CambiarClave(string email, string claveActual, string claveNueva, string claveNuevaRepetida)
@@ -432,11 +462,11 @@ namespace Dominio
 
         public void ProcesarOferta(int idCliente, int idSubasta, double monto, DateTime fecha)
         {
-            Subasta subasta = BuscarSubastaPorId(idSubasta);
+            Subasta? subasta = BuscarSubastaPorId(idSubasta);
             if (subasta == null) throw new Exception("La subasta a la que quiere ofertar no existe.");
             if (subasta.Estado != EstadoPublicacion.ABIERTA) throw new Exception("La subasta a la que quiere ofertar ya no está disponible.");
 
-            Cliente cliente = BuscarClientePorId(idCliente);
+            Cliente? cliente = BuscarClientePorId(idCliente);
 
             Oferta oferta = new Oferta(cliente, monto, fecha);
             oferta.Validar();
@@ -446,11 +476,11 @@ namespace Dominio
 
         public void ProcesarCompra(int idCliente, int idVenta, DateTime fecha)
         {
-            Venta venta = BuscarVentaPorId(idVenta);
+            Venta? venta = BuscarVentaPorId(idVenta);
             if (venta == null) throw new Exception("La publicacion que quiere comprar no existe.");
             if (venta.Estado != EstadoPublicacion.ABIERTA) throw new Exception("La publicacion que quiere comprar ya no está disponible.");
 
-            Cliente cliente = BuscarClientePorId(idCliente);
+            Cliente? cliente = BuscarClientePorId(idCliente);
             if (cliente == null) throw new Exception("Cliente inválido.");
             if (cliente.Saldo < venta.CalcularPrecio()) throw new Exception("Saldo insuficiente.");
 
@@ -460,26 +490,6 @@ namespace Dominio
         #endregion
 
         #region MÉTODOS AUXILIARES
-        public string NormalizarString(string str)
-        {
-            // Pasa el string a mayúsculas y quita todas las tildes.
-            str = str.ToUpper();
-
-            str = str.Replace('Á', 'A');
-            str = str.Replace('É', 'E');
-            str = str.Replace('Í', 'I');
-            str = str.Replace('Ó', 'O');
-            str = str.Replace('Ú', 'U');
-
-            str = str.Replace('À', 'A');
-            str = str.Replace('È', 'E');
-            str = str.Replace('Ì', 'I');
-            str = str.Replace('Ò', 'O');
-            str = str.Replace('Ù', 'U');
-
-            return str;
-        }
-
         //Devuelve una lista de articulos aleatorios (usado para precarga).
         private List<Articulo> ObtenerArticulosAleatorios(int cantidad)
         {

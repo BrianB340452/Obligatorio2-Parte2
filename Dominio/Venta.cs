@@ -60,6 +60,11 @@ namespace Dominio
         {
             return "Ir a comprar";
         }
+
+        public override string TipoPublicacion()
+        {
+            return "Venta";
+        }
         #endregion
     }
 }
