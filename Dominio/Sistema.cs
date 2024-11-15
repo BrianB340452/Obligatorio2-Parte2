@@ -151,6 +151,24 @@ namespace Dominio
             return v;
         }
 
+        public Usuario? BuscarUsuarioPorEmail(string email)
+        {
+            int i = 0;
+            Usuario? u = null;
+
+            while (u == null && i < _listaUsuarios.Count)
+            {
+                Usuario user = _listaUsuarios[i];
+
+                // Si el id coincide lo guardo
+                if (user.Email == email) u = user;
+
+                i++;
+            }
+
+            return u;
+        }
+
         public Cliente? BuscarClientePorId(int id)
         {
             int i = 0;
@@ -334,6 +352,7 @@ namespace Dominio
                 if (p is Subasta) subastas.Add((Subasta) p);
             }
 
+            subastas.Sort();
             return subastas;
         }
 
@@ -377,6 +396,7 @@ namespace Dominio
                 if (p.Nombre.ToLower().Contains(nombre.ToLower())) subastas.Add((Subasta) p);
             }
 
+            subastas.Sort();
             return subastas;
         }
 
@@ -389,6 +409,7 @@ namespace Dominio
                 if (p is Subasta && p.Nombre.ToLower().Contains(nombre.ToLower())) subastas.Add((Subasta)p);
             }
 
+            subastas.Sort();
             return subastas;
         }
 
@@ -401,6 +422,7 @@ namespace Dominio
                 if (p is Subasta && p.Estado == estado) subastas.Add((Subasta)p);
             }
 
+            subastas.Sort();
             return subastas;
         }
         #endregion
@@ -486,6 +508,17 @@ namespace Dominio
             if (cliente.Saldo < venta.CalcularPrecio()) throw new Exception("Saldo insuficiente.");
 
             venta.CerrarVenta(cliente, fecha);
+        }
+
+        public void CerrarSubasta(string email, int idSubasta)
+        {
+            Subasta? s = BuscarSubastaPorId(idSubasta);
+            if (s == null) throw new Exception("La subasta que quiere cerrar no existe.");
+
+            Usuario? finalizador = BuscarUsuarioPorEmail(email);
+            if (finalizador == null) throw new Exception("Usuario inválido");
+
+            s.CerrarSubasta(finalizador);
         }
 
         #endregion

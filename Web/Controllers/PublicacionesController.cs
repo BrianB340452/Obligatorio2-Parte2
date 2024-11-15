@@ -1,5 +1,6 @@
 ﻿using Dominio;
 using Microsoft.AspNetCore.Mvc;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 public class PublicacionesController : Controller
 {
@@ -26,11 +27,36 @@ public class PublicacionesController : Controller
         if (HttpContext.Session.GetString("Rol") == null) return RedirectToAction("Login", "Usuarios");
         if (HttpContext.Session.GetString("Rol") != "Administrador") return View("Unauthorized");
 
+        if (TempData["Error"] != null) ViewBag.Error = TempData["Error"];
+        if (TempData["Exito"] != null) ViewBag.Exito = TempData["Exito"];
+
         ViewBag.subastas = sistema.ListarSubastasFiltradas(nombre, estado);
+
         ViewBag.nombre = nombre;
         ViewBag.estado = estado;
 
         return View();
+    }
+
+    [HttpPost]
+    public IActionResult CerrarSubasta(int id)
+    {
+        // Autorizaciones
+        if (HttpContext.Session.GetString("Rol") == null) return RedirectToAction("Login", "Usuarios");
+        if (HttpContext.Session.GetString("Rol") != "Administrador") return View("Unauthorized");
+
+        try
+        {
+            string email = HttpContext.Session.GetString("Email");
+            sistema.CerrarSubasta(email, id);
+            TempData["Exito"] = $"El cierre de la subasta N.º{id} se procesó correctamente.";
+            return RedirectToAction("ListadoSubastas");
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return RedirectToAction("ListadoSubastas");
+        }
     }
 
     [HttpGet]

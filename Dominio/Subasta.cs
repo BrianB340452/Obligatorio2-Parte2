@@ -2,7 +2,7 @@
 
 namespace Dominio
 {
-    public class Subasta : Publicacion
+    public class Subasta : Publicacion, IComparable<Subasta>
     {
         #region ATRIBUTOS
         private List<Oferta> _ofertas = new List<Oferta>();
@@ -23,7 +23,7 @@ namespace Dominio
         {
             if (oferta == null) throw new Exception("La oferta no puede ser nula.");
 
-            Cliente ultimoClienteEnOfertar = UltimoClienteEnOfertar();
+            Cliente? ultimoClienteEnOfertar = UltimoClienteEnOfertar();
 
             if (ultimoClienteEnOfertar != null && ultimoClienteEnOfertar.Id == oferta.Cliente.Id) throw new Exception("Su oferta ya es la más alta.");
 
@@ -35,15 +35,38 @@ namespace Dominio
             _ofertas.Add(oferta);
         }
 
-        private Cliente UltimoClienteEnOfertar()
+        public void CerrarSubasta(Usuario finalizador)
+        {
+            if (Estado != EstadoPublicacion.ABIERTA) throw new Exception("La subasta ya se encuentra cerrada o cancelada.");
+            Oferta? o = MejorOfertaConSaldoSuficiente();
+
+            UsuarioFinalizador = finalizador;
+            FechaFinalizada = DateTime.Today;
+
+            if (o != null) Estado = EstadoPublicacion.CERRADA;
+            if (o == null) Estado = EstadoPublicacion.CANCELADA;
+        }
+
+        private Cliente? UltimoClienteEnOfertar()
         {
             if (_ofertas.Count > 0) return _ofertas.Last().Cliente;
             return null;
         }
 
-        public override string TipoPublicacion()
+        // Devuelve la mejor oferta, donde el cliente tenga saldo suficiente.
+        private Oferta? MejorOfertaConSaldoSuficiente()
         {
-            return "Subasta";
+            int i = _ofertas.Count - 1;
+            Oferta? oferta = null;
+
+            while (i >= 0 && oferta == null)
+            {
+                Oferta o = _ofertas[i];
+                if (o.Cliente.Saldo >= o.Monto) oferta = o;
+                i--;
+            }
+
+            return oferta;
         }
 
         public int CompareTo(Subasta other)
@@ -51,6 +74,7 @@ namespace Dominio
             return FechaPublicacion.CompareTo(other.FechaPublicacion);
         }
         #endregion
+
         #region OVERRIDES
         public override double CalcularPrecio()
         {
@@ -58,6 +82,10 @@ namespace Dominio
             return 0;
         }
 
+        public override string TipoPublicacion()
+        {
+            return "Subasta";
+        }
         public override bool EsOfertaRelampago()
         {
             return base.EsOfertaRelampago();
