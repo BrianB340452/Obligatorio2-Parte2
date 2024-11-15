@@ -435,15 +435,16 @@ namespace Dominio
             return u;
         }
 
-        public double RecargarSaldo(string email, int monto)
+        public int RecargarSaldo(string? email, int monto)
         {
+            if (string.IsNullOrEmpty(email)) throw new Exception("Cliente inválido.");
             Cliente? c = BuscarClientePorEmail(email);
             if (c == null) throw new Exception("Cliente inválido.");
             if (monto <= 0) throw new Exception("El monto a recargar debe ser superior a $0.");
 
             c.RecargarSaldo(monto);
 
-            return c.Saldo;
+            return Convert.ToInt32(c.Saldo);
         }
 
         public void CambiarClave(string email, string claveActual, string claveNueva, string claveNuevaRepetida)

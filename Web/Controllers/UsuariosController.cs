@@ -79,13 +79,24 @@ namespace Web.Controllers
             if (HttpContext.Session.GetString("Rol") != "Cliente") return View("Unauthorized");
 
             string? email = HttpContext.Session.GetString("Email");
-            ViewBag.Saldo = sistema.BuscarClientePorEmail(email).Saldo;
+
+            if (TempData["Saldo"] != null)
+            {
+                ViewBag.Saldo = TempData["Saldo"];
+            } else
+            {
+                ViewBag.Saldo = sistema.BuscarClientePorEmail(email).Saldo;
+            }
+
+            if (TempData["Exito"] != null) ViewBag.Exito = TempData["Exito"];
+            if (TempData["Error"] != null) ViewBag.Error = TempData["Error"];
 
             return View();
         }
 
         [HttpPost]
-        public IActionResult RecargarSaldo(int saldo)
+        // Se hace en un action de otro nombre para que no se pueda recargar saldo al recargar la página.
+        public IActionResult RecargarSaldoPost(int saldo)
         {
             // Autorizaciones
             if (HttpContext.Session.GetString("Email") == null) return RedirectToAction("Login", "Usuarios");
@@ -94,14 +105,14 @@ namespace Web.Controllers
             try
             {
                 string? email = HttpContext.Session.GetString("Email");
-                ViewBag.Saldo = sistema.RecargarSaldo(email, saldo);
-                ViewBag.Exito = $"Su recarga de ${saldo} se ha procesado exitosamente.";
-                return View();
+                TempData["Saldo"] = sistema.RecargarSaldo(email, saldo);
+                TempData["Exito"] = $"Su recarga de ${saldo} se ha procesado exitosamente.";
+                return RedirectToAction("RecargarSaldo");
             }
             catch (Exception ex)
             {
-                ViewBag.Error = ex.Message;
-                return View();
+                TempData["Error"] = ex.Message;
+                return RedirectToAction("RecargarSaldo");
             }
         }
 

@@ -20,7 +20,7 @@
     </div>
 }
 
-<form method="post" action="/Usuarios/RecargarSaldo">
+<form method="post" action="/Usuarios/RecargarSaldoPost">
 
     <label class="form-label" for="txtSaldo">Recargas:</label>
     <div class="input-group">
@@ -28,7 +28,7 @@
             <i class="fa-solid fa-dollar-sign"></i>
         </span>
 
-        <input required class="form-control" id="txtSaldo" type="number" name="saldo" min="1" placeholder="Ingrese el saldo a recargar" />
+        <input required class="form-control" id="txtSaldo" type="number" name="saldo" min="1" autocomplete="off" placeholder="Ingrese el saldo a recargar" />
     </div>
     @if (ViewBag.saldo != null)
     {
