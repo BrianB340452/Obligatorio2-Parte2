@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Articulos\**" />
+    <Content Remove="Views\Articulos\**" />
+    <EmbeddedResource Remove="Views\Articulos\**" />
+    <None Remove="Views\Articulos\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Dominio\Dominio.csproj" />
   </ItemGroup>
 
@@ -15,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Articulos\" />
     <Folder Include="wwwroot\fonts\" />
   </ItemGroup>
 

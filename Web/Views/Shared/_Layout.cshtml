@@ -46,9 +46,6 @@
                                     </li>
                                 }
 
-                                <li class="nav-item mx-2">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Articulos" asp-action="Index">Artículos</a>
-                                </li>
 
                                 <li class="nav-item ms-3">
                                     <div class="btn-group">
@@ -57,14 +54,14 @@
                                         </button>
 
                                         <ul class="dropdown-menu dropdown-menu-end mt-2">
-                                            <li><a class="dropdown-item" asp-controller="Usuarios" asp-action="Perfil">Ver perfil</a></li>
-
+                                         
                                             @if (Context.Session.GetString("Rol") == "Cliente")
                                             {
                                                 <li><a class="dropdown-item" asp-controller="Usuarios" asp-action="RecargarSaldo">Recargar saldo</a></li>
+                                                <li><hr class="dropdown-divider" /></li>
                                             }
 
-                                            <li><hr class="dropdown-divider" /></li>
+                                          
 
                                             <li>
                                                 <a type="button" class="dropdown-item btn text-danger" asp-controller="Usuarios" asp-action="Logout">
