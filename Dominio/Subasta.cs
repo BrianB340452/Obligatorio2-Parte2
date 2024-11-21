@@ -38,12 +38,20 @@ namespace Dominio
         public void CerrarSubasta(Usuario finalizador)
         {
             if (Estado != EstadoPublicacion.ABIERTA) throw new Exception("La subasta ya se encuentra cerrada o cancelada.");
-            Oferta? o = MejorOfertaConSaldoSuficiente();
 
             UsuarioFinalizador = finalizador;
             FechaFinalizada = DateTime.Today;
 
-            if (o != null) Estado = EstadoPublicacion.CERRADA;
+            Oferta? o = MejorOfertaConSaldoSuficiente();
+
+            if (o != null)
+            {
+                ClienteComprador = o.Cliente;
+                ClienteComprador.Saldo -= o.Monto;
+                Estado = EstadoPublicacion.CERRADA;
+            }
+
+            // En caso de que NO haya un ofertante con saldo suficiente, se cancela la subasta.
             if (o == null) Estado = EstadoPublicacion.CANCELADA;
         }
 
