@@ -94,6 +94,7 @@ namespace Dominio
         {
             return "Subasta";
         }
+
         public override bool EsOfertaRelampago()
         {
             return base.EsOfertaRelampago();

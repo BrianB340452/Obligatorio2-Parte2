@@ -61,54 +61,7 @@ namespace Dominio
         }
         #endregion
 
-        #region AGREGACIONES
-        public void AgregarArticuloAPublicacion(int idArticulo, int idPublicacion)
-        {
-            Publicacion publicacion = BuscarPublicacionPorId(idPublicacion);
-            if (publicacion == null) throw new Exception("La publicación ingresada no existe.");
-
-            Articulo articulo = BuscarArticuloPorId(idArticulo);
-            publicacion.AgregarArticulo(articulo);
-        }
-        #endregion
-
-        #region BUSQUEDAS
-        public Articulo? BuscarArticuloPorId(int id)
-        {
-            int i = 0;
-            Articulo? a = null;
-
-            while (a == null && i < _listaArticulos.Count)
-            {
-                Articulo art = _listaArticulos[i];
-
-                // Si el id coincide, guardo el artículo
-                if (art.Id == id) a = art;
-
-                i++;
-            }
-
-            return a;
-        }
-
-        public Publicacion? BuscarPublicacionPorId(int id)
-        {
-            int i = 0;
-            Publicacion? p = null;
-
-            while (p == null && i < _listaPublicaciones.Count)
-            {
-                Publicacion publi = _listaPublicaciones[i];
-
-                // Si el id coincide, guardo la publicacion
-                if (publi.Id == id) p = publi;
-
-                i++;
-            }
-
-            return p;
-        }
-
+        #region BUSQUEDAS 
         public Subasta? BuscarSubastaPorId(int id)
         {
             int i = 0;
@@ -228,32 +181,6 @@ namespace Dominio
         }
         #endregion
 
-        #region ARTÍCULOS
-        public List<string> ListarCategorias()
-        {
-            List<string> categorias = new List<string>();
-
-            foreach (Articulo a in _listaArticulos)
-            {
-                if (!categorias.Contains(a.Categoria)) categorias.Add(a.Categoria);
-            }
-
-            return categorias;
-        }
-
-        public List<Articulo> ListarArticulosPorCategoria(string categoria)
-        {
-            List<Articulo> articulos = new List<Articulo>();
-
-            foreach (Articulo a in _listaArticulos)
-            {
-                if (a.Categoria == categoria) articulos.Add(a);
-            }
-
-            return articulos;
-        }
-        #endregion
-
         #region PUBLICACIONES
         //Listado de publicaciones dados su nombre y/o estado.
         public List<Publicacion> ListarPublicacionesFiltradas(string nombre, int estado)
@@ -323,22 +250,6 @@ namespace Dominio
             return publicaciones;
         }
 
-        //Listado de publicaciones que se encuentren entre dos fechas específicas.
-        public List<Publicacion> ListarPublicacionesEntreDosFechas(DateTime fechaInicio, DateTime fechaFin)
-        {
-            if (fechaInicio > fechaFin) throw new Exception("La fecha de inicio no puede ser mayor a la fecha final.");
-            List<Publicacion> publicaciones = new List<Publicacion>();
-
-            foreach (Publicacion p in _listaPublicaciones)
-            {
-                if (p.FechaPublicacion.Date >= fechaInicio.Date && p.FechaPublicacion.Date <= fechaFin.Date)
-                {
-                    publicaciones.Add(p);
-                }
-            }
-
-            return publicaciones;
-        }
         #endregion
 
         #region SUBASTAS
@@ -349,7 +260,7 @@ namespace Dominio
 
             foreach (Publicacion p in _listaPublicaciones)
             {
-                if (p is Subasta) subastas.Add((Subasta) p);
+                if (p.TipoPublicacion() == "Subasta") subastas.Add((Subasta) p);
             }
 
             subastas.Sort();
@@ -406,7 +317,7 @@ namespace Dominio
 
             foreach (Publicacion p in _listaPublicaciones)
             {
-                if (p is Subasta && p.Nombre.ToLower().Contains(nombre.ToLower())) subastas.Add((Subasta)p);
+                if (p.TipoPublicacion() == "Subasta" && p.Nombre.ToLower().Contains(nombre.ToLower())) subastas.Add((Subasta)p);
             }
 
             subastas.Sort();
@@ -419,16 +330,12 @@ namespace Dominio
 
             foreach (Publicacion p in _listaPublicaciones)
             {
-                if (p is Subasta && p.Estado == estado) subastas.Add((Subasta)p);
+                if (p.TipoPublicacion() == "Subasta" && p.Estado == estado) subastas.Add((Subasta)p);
             }
 
             subastas.Sort();
             return subastas;
         }
-        #endregion
-
-        #region VENTAS
-
         #endregion
 
         #endregion
@@ -469,19 +376,6 @@ namespace Dominio
             return Convert.ToInt32(c.Saldo);
         }
 
-        public void CambiarClave(string email, string claveActual, string claveNueva, string claveNuevaRepetida)
-        {
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(claveActual) || string.IsNullOrEmpty(claveNueva) || string.IsNullOrEmpty(claveNuevaRepetida)) throw new Exception("Hay datos sin completar.");
-            if (claveNueva.Length < 8) throw new Exception("La contraseña debe tener una longitud de 8 o más caracteres.");
-
-            Usuario u = IniciarSesion(email, claveActual);
-            if (u == null) throw new Exception("La contraseña actual es incorrecta.");
-
-            if (claveNueva != claveNuevaRepetida) throw new Exception("Las contraseñas ingresadas no coinciden.");
-            if (claveActual == claveNueva) throw new Exception("La contraseña nueva no puede ser la misma que la actual.");
-
-            u.Clave = claveNueva;
-        }
 
         public void ProcesarOferta(int idCliente, int idSubasta, double monto, DateTime fecha)
         {
