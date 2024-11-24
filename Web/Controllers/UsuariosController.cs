@@ -27,8 +27,11 @@ namespace Web.Controllers
 
             try
             {
+                // Método para realizar verificaciones. 
+                // Valida si el usuario y la clave son correctos para permitir el inicio de sesión.
                 Usuario u = sistema.IniciarSesion(Email, Clave);
 
+                // Almacenamos información del usuario en la sesión:
                 HttpContext.Session.SetInt32("Id", u.Id);
                 HttpContext.Session.SetString("Email", u.Email);
                 HttpContext.Session.SetString("Rol", u.TipoUsuario());
@@ -60,6 +63,7 @@ namespace Web.Controllers
             try
             {
                 Cliente c = new Cliente(nombre, apellido, email, clave, 2000);
+                // Se delega al sistema la responsabilidad de gestionar el proceso de alta.
                 sistema.AltaUsuario(c);
                 TempData["Exito"] = "¡Registro exitoso!";
                 return RedirectToAction("Login");
