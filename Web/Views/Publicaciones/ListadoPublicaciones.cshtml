@@ -5,6 +5,10 @@
 }
 
 <!-- Formulario de búsqueda -->
+<!-- Pasaremos al controlador el nombre y el estado que elija el usuario mediante los atributos "name".
+Allí los guardaremos en "ViewBag" para recuperarlos nuevamente, asignarlos al atributo "value" y evitar que se borren de los campos de entrada.
+Repetimos este procedimiento en distintos formularios. -->
+
 <form method="get" action="ListadoPublicaciones" class="py-3">
     <div class="row">
         <div class="col-4">
@@ -71,6 +75,7 @@
                 <td>$@p.CalcularPrecio()</td>
                 <td>@p.Estado</td>
                 <td>
+                    <!-- Utilizamos métodos y herencias para darle estilo al botón de compra y, por supuesto, para redirigir correctamente con un enlace, dependiendo de si es subasta o venta. -->
                     <a title="@p.TituloWeb()" class="@p.ClaseBtnWeb() position-relative" href="@p.EnlaceWeb()">
                         <i class="@p.IconoWeb()"></i>
                         @if (p.EsOfertaRelampago() && p.Estado == Dominio.Enums.EstadoPublicacion.ABIERTA)

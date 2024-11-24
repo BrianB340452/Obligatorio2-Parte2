@@ -4,6 +4,9 @@
     ViewData["Title"] = "Subastas";
 }
 
+<!-- Los siguientes condicionales se encargan de mostrar un mensaje de éxito o error proveniente del controlador.
+Utilizamos esta lógica en varias ocasiones. -->
+
 @if (ViewBag.Exito != null)
 {
     <div class="alert alert-success alert-dismissible fade show my-4" role="alert">
@@ -21,6 +24,7 @@
 }
 
 <!-- Formulario de búsqueda -->
+<!-- igual que en ListadoPublicaciones (allí se comenta) -->
 <form method="get" action="ListadoSubastas" class="py-3">
     <div class="row">
         <div class="col-4">
@@ -91,6 +95,7 @@
                 <td>
                     @if (s.Estado == Dominio.Enums.EstadoPublicacion.ABIERTA)
                     {
+                        <!-- Este formulario inicia el cierre de subastas que realiza el Admin, pasando el id de la subasta a cerrar -->
                         <form action="/Publicaciones/CerrarSubasta" method="post">
                             <input hidden name="id" value="@s.Id" />
                             <button type="submit" title="Cerrar subasta @s.Id" class="btn btn-danger">

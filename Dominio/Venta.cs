@@ -27,6 +27,9 @@ namespace Dominio
             if (comprador == null) throw new Exception("Cliente inválido.");
             if (comprador.Saldo < CalcularPrecio()) throw new Exception("Saldo insuficiente.");
 
+            // Una vez superadas las validaciones, la compra cambia al estado "Cerrada". 
+            // Se registra el administrador que la finaliza, el cliente que realiza la compra 
+            // y se descuenta el precio de la compra del saldo del cliente.
             Estado = EstadoPublicacion.CERRADA;
             UsuarioFinalizador = comprador;
             ClienteComprador = comprador;

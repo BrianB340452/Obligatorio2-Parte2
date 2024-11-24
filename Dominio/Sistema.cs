@@ -263,6 +263,7 @@ namespace Dominio
                 if (p.TipoPublicacion() == "Subasta") subastas.Add((Subasta) p);
             }
 
+            // ordenamos las subastas por fecha, por lo tanto ademas del Sort() usaremos CompareTo en Subasta.cs.
             subastas.Sort();
             return subastas;
         }
@@ -307,6 +308,7 @@ namespace Dominio
                 if (p.Nombre.ToLower().Contains(nombre.ToLower())) subastas.Add((Subasta) p);
             }
 
+            // ordenamos las subastas por fecha, por lo tanto ademas del Sort() usaremos CompareTo en Subasta.cs.
             subastas.Sort();
             return subastas;
         }
@@ -384,26 +386,33 @@ namespace Dominio
             if (subasta.Estado != EstadoPublicacion.ABIERTA) throw new Exception("La subasta a la que quiere ofertar ya no está disponible.");
 
             Cliente? cliente = BuscarClientePorId(idCliente);
+            if (cliente == null) throw new Exception("El cliente no existe.");
 
             Oferta oferta = new Oferta(cliente, monto, fecha);
             oferta.Validar();
+            //obtenemos los objetos y los validamos , para obtener la oferta y validarla, y por ultimo la agregamos a una subasta
 
             subasta.AgregarOferta(oferta);
         }
 
         public void ProcesarCompra(int idCliente, int idVenta, DateTime fecha)
         {
+            // Obtenemos los objetos necesarios y realizamos las validaciones. 
+
             Venta? venta = BuscarVentaPorId(idVenta);
             if (venta == null) throw new Exception("La publicacion que quiere comprar no existe.");
             if (venta.Estado != EstadoPublicacion.ABIERTA) throw new Exception("La publicacion que quiere comprar ya no está disponible.");
 
             Cliente? cliente = BuscarClientePorId(idCliente);
             if (cliente == null) throw new Exception("Cliente inválido.");
+            // Verificamos que el saldo del cliente sea mayor o igual al precio de la venta.
             if (cliente.Saldo < venta.CalcularPrecio()) throw new Exception("Saldo insuficiente.");
 
+            //cerramos la venta
             venta.CerrarVenta(cliente, fecha);
         }
 
+        //obtenemos ambos objetos y usamos otro metodo para finalizar la subasta
         public void CerrarSubasta(string email, int idSubasta)
         {
             Subasta? s = BuscarSubastaPorId(idSubasta);
