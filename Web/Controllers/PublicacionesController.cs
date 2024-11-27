@@ -47,8 +47,10 @@ public class PublicacionesController : Controller
 
         try
         {
+            //Para cerrar una subasta, necesitamos la subasta y el administrador, quien se obtendrá de la sesión, ya que está logueado.
             string email = HttpContext.Session.GetString("Email");
             sistema.CerrarSubasta(email, id);
+            //usamos TempData para los mensajes que se mostraran en otra accion de este controlador.
             TempData["Exito"] = $"El cierre de la subasta N.º{id} se procesó correctamente.";
             return RedirectToAction("ListadoSubastas");
         }
@@ -71,7 +73,7 @@ public class PublicacionesController : Controller
     }
 
     [HttpPost]
-    public IActionResult Venta(int idVenta, int idCliente, double oferta)
+    public IActionResult Venta(int idVenta, int idCliente)
     {
         // Autorizaciones
         if (HttpContext.Session.GetString("Rol") == null) return RedirectToAction("Login", "Usuarios");
@@ -80,6 +82,7 @@ public class PublicacionesController : Controller
         try
         {
             ViewBag.venta = sistema.BuscarVentaPorId(idVenta);
+            //Procesamos en sistema.
             sistema.ProcesarCompra(idCliente, idVenta, DateTime.Now);
             ViewBag.Exito = "Su compra se ha procesado exitosamente.";
             return View();
@@ -112,6 +115,7 @@ public class PublicacionesController : Controller
         try
         {
             ViewBag.subasta = sistema.BuscarSubastaPorId(idSubasta);
+            //procesamos la oferta en sistema
             sistema.ProcesarOferta(idCliente, idSubasta, oferta, DateTime.Now);
             ViewBag.Exito = "Su oferta se ha procesado exitosamente.";
             return View();
