@@ -395,7 +395,7 @@ namespace Dominio
             subasta.AgregarOferta(oferta);
         }
 
-        public void ProcesarCompra(int idCliente, int idVenta, DateTime fecha)
+        public void ProcesarCompra(int idCliente, int idVenta)
         {
             // Obtenemos los objetos necesarios y realizamos las validaciones. 
 
@@ -409,7 +409,7 @@ namespace Dominio
             if (cliente.Saldo < venta.CalcularPrecio()) throw new Exception("Saldo insuficiente.");
 
             //cerramos la venta
-            venta.CerrarVenta(cliente, fecha);
+            venta.CerrarPublicacion(cliente);
         }
 
         //obtenemos ambos objetos y usamos otro metodo para finalizar la subasta
@@ -421,7 +421,7 @@ namespace Dominio
             Usuario? finalizador = BuscarUsuarioPorEmail(email);
             if (finalizador == null) throw new Exception("Usuario inválido");
 
-            s.CerrarSubasta(finalizador);
+            s.CerrarPublicacion(finalizador);
         }
 
         #endregion

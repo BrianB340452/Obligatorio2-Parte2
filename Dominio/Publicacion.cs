@@ -48,6 +48,8 @@ namespace Dominio
 
         public abstract string TipoPublicacion();
 
+        public abstract void CerrarPublicacion(Usuario u);
+
         public virtual void AgregarArticulo(Articulo articulo)
         {
             if (articulo == null) throw new Exception("El artículo no puede ser nulo.");

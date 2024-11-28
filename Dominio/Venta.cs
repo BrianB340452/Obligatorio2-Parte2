@@ -21,22 +21,6 @@ namespace Dominio
         }
         #endregion
 
-        #region MÉTODOS Y FUNCIONES
-        public void CerrarVenta(Cliente comprador, DateTime fecha)
-        {
-            if (comprador == null) throw new Exception("Cliente inválido.");
-            if (comprador.Saldo < CalcularPrecio()) throw new Exception("Saldo insuficiente.");
-
-            // Una vez superadas las validaciones, la compra cambia al estado "Cerrada". 
-            // Se registra el administrador que la finaliza, el cliente que realiza la compra 
-            // y se descuenta el precio de la compra del saldo del cliente.
-            Estado = EstadoPublicacion.CERRADA;
-            UsuarioFinalizador = comprador;
-            ClienteComprador = comprador;
-            comprador.Saldo -= CalcularPrecio();
-        }
-        #endregion
-
         #region OVERRIDES
         public override double CalcularPrecio()
         {
@@ -67,6 +51,24 @@ namespace Dominio
         public override string TipoPublicacion()
         {
             return "Venta";
+        }
+
+        public override void CerrarPublicacion(Usuario u)
+        {
+            if (u == null || u.TipoUsuario() != "Cliente") throw new Exception("Cliente inválido.");
+            Cliente comprador = (Cliente) u;
+
+            if (comprador.Saldo < CalcularPrecio()) throw new Exception("Saldo insuficiente.");
+
+            // Una vez superadas las validaciones, la compra cambia al estado "Cerrada". 
+            // Se registra el administrador que la finaliza, el cliente que realiza la compra 
+            // y se descuenta el precio de la compra del saldo del cliente.
+            Estado = EstadoPublicacion.CERRADA;
+            UsuarioFinalizador = comprador;
+            ClienteComprador = comprador;
+            FechaFinalizada = DateTime.Now;
+
+            comprador.Saldo -= CalcularPrecio();
         }
         #endregion
     }

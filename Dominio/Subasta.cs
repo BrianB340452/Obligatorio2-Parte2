@@ -39,7 +39,7 @@ namespace Dominio
             _ofertas.Add(oferta);
         }
 
-        public void CerrarSubasta(Usuario finalizador)
+        public override void CerrarPublicacion(Usuario finalizador)
         {
             // verificamos que la subasta este en estado abierta , y si es asi procesamos el cierre de subasta.
             if (Estado != EstadoPublicacion.ABIERTA) throw new Exception("La subasta ya se encuentra cerrada o cancelada.");

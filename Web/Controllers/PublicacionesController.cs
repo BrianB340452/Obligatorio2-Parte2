@@ -83,7 +83,7 @@ public class PublicacionesController : Controller
         {
             ViewBag.venta = sistema.BuscarVentaPorId(idVenta);
             //Procesamos en sistema.
-            sistema.ProcesarCompra(idCliente, idVenta, DateTime.Now);
+            sistema.ProcesarCompra(idCliente, idVenta);
             ViewBag.Exito = "Su compra se ha procesado exitosamente.";
             return View();
         }
